@@ -120,12 +120,6 @@
       "downloaded_at": "2023-08-24 13:23:05.518811Z",
       "sha": "ace47eee209d55a7506e60e7e664f8e75ad9848c"
     },
-    "pincer-egfr.csv": {
-      "id": "pincer/egfr/v1.8",
-      "url": "https://codelists.opensafely.org/codelist/pincer/egfr/v1.8/",
-      "downloaded_at": "2023-08-24 13:23:05.759071Z",
-      "sha": "eaa84a4eb8e58348ac89274ea0cea8255fcea1f3"
-    },
     "opensafely-chronic-liver-disease.csv": {
       "id": "opensafely/chronic-liver-disease/2020-06-02",
       "url": "https://codelists.opensafely.org/codelist/opensafely/chronic-liver-disease/2020-06-02/",
@@ -150,17 +144,17 @@
       "downloaded_at": "2023-08-24 13:23:06.742239Z",
       "sha": "855e7e09a0500401ae2429c6a401978e8c9075ec"
     },
-    "opensafely-asplenia.csv": {
-      "id": "opensafely/asplenia/2020-06-02",
-      "url": "https://codelists.opensafely.org/codelist/opensafely/asplenia/2020-06-02/",
-      "downloaded_at": "2023-08-24 13:23:07.010987Z",
-      "sha": "7599ea87a8f3d9d92389a728966d3077b00ac828"
-    },
     "opensafely-sickle-cell-disease.csv": {
       "id": "opensafely/sickle-cell-disease/2020-04-14",
       "url": "https://codelists.opensafely.org/codelist/opensafely/sickle-cell-disease/2020-04-14/",
       "downloaded_at": "2023-08-24 13:23:07.280038Z",
       "sha": "c30644d91b2c23e805f1ad6b723c30d1f4cc2191"
+    },
+    "opensafely-asplenia.csv": {
+      "id": "opensafely/asplenia/2020-06-02",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/asplenia/2020-06-02/",
+      "downloaded_at": "2023-08-24 13:23:07.010987Z",
+      "sha": "7599ea87a8f3d9d92389a728966d3077b00ac828"
     },
     "opensafely-ra-sle-psoriasis.csv": {
       "id": "opensafely/ra-sle-psoriasis/2020-04-14",
