@@ -14,9 +14,6 @@ library(gt)
 library(gtsummary)
 library(reshape2)
 
-# Load json config for dates of waves
-config <- fromJSON(here("analysis", "config.json"))
-
 # Select wave and subgroup based on input arguments
 args <- commandArgs(trailingOnly=TRUE)
 if(length(args)==0){
@@ -73,12 +70,12 @@ counts <- data_filtered %>%
          smoking_status_comb,
 
          # Immunosuppression
-         organ_transplant,
-         bone_marrow_transplant,
-         haem_cancer,
-         immunosuppression_diagnosis,
-         immunosuppression_medication,
-         radio_chemo,
+         organ_transplant_cat,
+         bone_marrow_transplant_cat,
+         haem_cancer_cat,
+         immunosuppression_diagnosis_cat,
+         immunosuppression_medication_cat,
+         radio_chemo_cat,
          
          # Vaccination
          n_doses_omicron,
@@ -126,7 +123,7 @@ rounded_n = plyr::round_any(nrow(data_filtered), rounding_threshold)
 
 ## Round individual values to rounding threshold
 table1_redacted <- table1 %>%
-  mutate(Count = plyr::round_any(count, rounding_threshold))
+  mutate(count = plyr::round_any(count, rounding_threshold))
 table1_redacted$percent = round(table1_redacted$count/rounded_n*100,1)
 table1_redacted$non_count = rounded_n - table1_redacted$count
 

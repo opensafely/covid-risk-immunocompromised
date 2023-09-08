@@ -20,16 +20,22 @@
     "immunosuppression_vars" : [
         "organ_transplant",
         "organ_transplant_date",
+        "organ_transplant_cat",
         "bone_marrow_transplant",
         "bone_marrow_transplant_date",
+        "bone_marrow_transplant_cat",
         "haem_cancer",
         "haem_cancer_date",
+        "haem_cancer_cat",
         "immunosuppression_diagnosis",
         "immunosuppression_diagnosis_date",
+        "immunosuppression_diagnosis_cat",
         "immunosuppression_medication",
         "immunosuppression_medication_date",
+        "immunosuppression_medication_cat",
         "radio_chemo",
-        "radio_chemo_date"
+        "radio_chemo_date",
+        "radio_chemo_cat"
     ],
     "comorbidity_vars" : [
         "asthma",

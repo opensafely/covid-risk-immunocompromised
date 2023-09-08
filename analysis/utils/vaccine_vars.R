@@ -67,16 +67,15 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron")){
     data <- data %>% mutate(era_start_date = omicron_start_date)
   }
   
-  data <- 
-    data %>%
+  data <- data %>%
     mutate(
       # Create modified vaccination variables where records after era start date set to NA
-      covid_vax_date_1_mod = if_else(covid_vax_date_1<era_start_date, covid_vax_date_1, ymd(NA)),
-      covid_vax_date_2_mod = if_else(covid_vax_date_2<era_start_date, covid_vax_date_2, ymd(NA)),
-      covid_vax_date_3_mod = if_else(covid_vax_date_3<era_start_date, covid_vax_date_3, ymd(NA)),
-      covid_vax_date_4_mod = if_else(covid_vax_date_4<era_start_date, covid_vax_date_4, ymd(NA)),
-      covid_vax_date_5_mod = if_else(covid_vax_date_5<era_start_date, covid_vax_date_5, ymd(NA)),
-      covid_vax_date_6_mod = if_else(covid_vax_date_6<era_start_date, covid_vax_date_6, ymd(NA)),
+      covid_vax_date_1_mod = if_else(covid_vax_date_1<=era_start_date, covid_vax_date_1, ymd(NA)),
+      covid_vax_date_2_mod = if_else(covid_vax_date_2<=era_start_date, covid_vax_date_2, ymd(NA)),
+      covid_vax_date_3_mod = if_else(covid_vax_date_3<=era_start_date, covid_vax_date_3, ymd(NA)),
+      covid_vax_date_4_mod = if_else(covid_vax_date_4<=era_start_date, covid_vax_date_4, ymd(NA)),
+      covid_vax_date_5_mod = if_else(covid_vax_date_5<=era_start_date, covid_vax_date_5, ymd(NA)),
+      covid_vax_date_6_mod = if_else(covid_vax_date_6<=era_start_date, covid_vax_date_6, ymd(NA)),
       
       # Pick last dose date pre era
       pre_era_last_vax_date = pmax(covid_vax_date_1_mod, covid_vax_date_2_mod, covid_vax_date_3_mod, 
@@ -136,12 +135,12 @@ first_dose_post_era <- function(data, era=c("alpha", "delta", "omicron")){
     data %>%
     mutate(
       # Create modified vaccination variables where records after era start date set to NA
-      covid_vax_date_1_mod = if_else(covid_vax_date_1>=era_start_date, covid_vax_date_1, ymd(NA)),
-      covid_vax_date_2_mod = if_else(covid_vax_date_2>=era_start_date, covid_vax_date_2, ymd(NA)),
-      covid_vax_date_3_mod = if_else(covid_vax_date_3>=era_start_date, covid_vax_date_3, ymd(NA)),
-      covid_vax_date_4_mod = if_else(covid_vax_date_4>=era_start_date, covid_vax_date_4, ymd(NA)),
-      covid_vax_date_5_mod = if_else(covid_vax_date_5>=era_start_date, covid_vax_date_5, ymd(NA)),
-      covid_vax_date_6_mod = if_else(covid_vax_date_6>=era_start_date, covid_vax_date_6, ymd(NA)),
+      covid_vax_date_1_mod = if_else(covid_vax_date_1>era_start_date, covid_vax_date_1, ymd(NA)),
+      covid_vax_date_2_mod = if_else(covid_vax_date_2>era_start_date, covid_vax_date_2, ymd(NA)),
+      covid_vax_date_3_mod = if_else(covid_vax_date_3>era_start_date, covid_vax_date_3, ymd(NA)),
+      covid_vax_date_4_mod = if_else(covid_vax_date_4>era_start_date, covid_vax_date_4, ymd(NA)),
+      covid_vax_date_5_mod = if_else(covid_vax_date_5>era_start_date, covid_vax_date_5, ymd(NA)),
+      covid_vax_date_6_mod = if_else(covid_vax_date_6>era_start_date, covid_vax_date_6, ymd(NA)),
       
       # Pick first dose date post era
       post_era_first_vax_date = pmin(covid_vax_date_1_mod, covid_vax_date_2_mod, covid_vax_date_3_mod, 

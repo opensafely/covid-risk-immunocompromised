@@ -42,12 +42,12 @@ rename_subgroups <- function(table){
         subgroup == "pre_omicron_infection_group" ~ "Prior infection status",
         
         # Immunosuppression
-        subgroup == "organ_transplant" ~ "Organ transplant",
-        subgroup == "bone_marrow_transplant" ~ "Bone marrow transplant",
-        subgroup == "haem_cancer" ~ "Haematological malignancy",
-        subgroup == "immunosuppression_diagnosis" ~ "Immunosuppression (diagnosis)",
-        subgroup == "immunosuppression_medication" ~ "Immunosuppression (medication)",
-        subgroup == "radio_chemo" ~ "Radiotherapy/Chemotherapy",
+        subgroup == "organ_transplant_cat" ~ "Organ transplant",
+        subgroup == "bone_marrow_transplant_cat" ~ "Bone marrow transplant",
+        subgroup == "haem_cancer_cat" ~ "Haematological malignancy",
+        subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
+        subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
+        subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         
         # Comorbidities (multiple levels)
         subgroup == "asthma" ~ "Asthma",

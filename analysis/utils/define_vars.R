@@ -161,6 +161,52 @@ process_data <- function(data_extracted) {
         ckd_rrt == "RRT (transplant)" ~ "RRT (transplant)"
       ),
       
+      # Define time since immunosuppression records
+      time_since_organ_transplant = as.numeric(index_date - organ_transplant_date),
+      time_since_bone_marrow_transplant = as.numeric(index_date - bone_marrow_transplant_date),
+      time_since_haem_cancer = as.numeric(index_date - haem_cancer_date),
+      time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
+      time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
+      time_since_radio_chemo = as.numeric(index_date - radio_chemo_date),
+      
+      # Define time since immunosuppression categories
+      organ_transplant_cat = fct_case_when(
+        is.na(time_since_organ_transplant) ~ "Absent",
+        time_since_organ_transplant>365 ~ ">1 year",
+        time_since_organ_transplant>=0 & time_since_organ_transplant<=365 ~ "<=1 year",
+        TRUE ~ NA_character_
+      ),
+      bone_marrow_transplant_cat = fct_case_when(
+        is.na(time_since_bone_marrow_transplant) ~ "Absent",
+        time_since_bone_marrow_transplant>365 ~ ">1 year",
+        time_since_bone_marrow_transplant>=0 & time_since_bone_marrow_transplant<=365 ~ "<=1 year",
+        TRUE ~ NA_character_
+      ),
+      haem_cancer_cat = fct_case_when(
+        is.na(time_since_haem_cancer) ~ "Absent",
+        time_since_haem_cancer>365 ~ ">1 year",
+        time_since_haem_cancer>=0 & time_since_haem_cancer<=365 ~ "<=1 year",
+        TRUE ~ NA_character_
+      ),
+      immunosuppression_diagnosis_cat = fct_case_when(
+        is.na(time_since_immunosuppression_diagnosis) ~ "Absent",
+        time_since_immunosuppression_diagnosis>365 ~ ">1 year",
+        time_since_immunosuppression_diagnosis>=0 & time_since_immunosuppression_diagnosis<=365 ~ "<=1 year",
+        TRUE ~ NA_character_
+      ),
+      immunosuppression_medication_cat = fct_case_when(
+        is.na(time_since_immunosuppression_medication) ~ "Absent",
+        time_since_immunosuppression_medication>90 ~ ">3 months",
+        time_since_immunosuppression_medication>=0 & time_since_immunosuppression_medication<=90 ~ "<=3 months",
+        TRUE ~ NA_character_
+      ),
+      radio_chemo_cat = fct_case_when(
+        is.na(time_since_radio_chemo) ~ "Absent",
+        time_since_radio_chemo>90 ~ ">3 months",
+        time_since_radio_chemo>=0 & time_since_radio_chemo<=90 ~ "<=3 months",
+        TRUE ~ NA_character_
+      ),
+      
       # Pick last era-specific infections and set infection categories
       wt_covid_max_date = pmax(wt_positive_test_date, wt_primary_care_date, wt_emergency_date, wt_hospitalisation_date, na.rm=TRUE),
       wt_covid_cat = as.numeric(!is.na(wt_covid_max_date)),
@@ -176,17 +222,17 @@ process_data <- function(data_extracted) {
       
       # Prior infection groups
       pre_alpha_infection_group = fct_case_when(
-        wt_covid_cat == 0 ~ "No prior infection)",
+        wt_covid_cat == 0 ~ "No prior infection",
         wt_covid_cat == 1 ~ "Infected (WT)"
       ),
       pre_delta_infection_group = fct_case_when(
-        wt_covid_cat == 0 & alpha_covid_cat == 0 ~ "No prior infection)",
+        wt_covid_cat == 0 & alpha_covid_cat == 0 ~ "No prior infection",
         wt_covid_cat == 1 & alpha_covid_cat == 0 ~ "Infected (WT only)",
         wt_covid_cat == 0 & alpha_covid_cat == 1 ~ "Infected (Alpha only)",
         wt_covid_cat == 1 & alpha_covid_cat == 1 ~ "Infected (WT + Alpha)"
       ),
       pre_omicron_infection_group = fct_case_when(
-        wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 ~ "No prior infection)",
+        wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 ~ "No prior infection",
         (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 0 ~ "Infected (Pre Delta only)",
         wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 1 ~ "Infected (Delta only)",
         (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 1 ~ "Infected (Pre Delta + Delta)"

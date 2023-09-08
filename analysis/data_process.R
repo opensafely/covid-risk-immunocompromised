@@ -19,7 +19,7 @@ library(tidyverse)
 utils_dir <- here("analysis", "utils")
 source(paste0(utils_dir, "/extract_data.R")) # function extract_data()
 source(paste0(utils_dir, "/kidney_functions.R")) # function add_kidney_vars_to_data()
-source(paste0(utils_dir, "/process_data.R")) # function process_data()
+source(paste0(utils_dir, "/define_vars.R")) # function define_vars()
 source(paste0(utils_dir, "/vaccine_vars.R")) # functions to define vaccine groups
 
 # Print session info to metadata log file
@@ -37,6 +37,12 @@ if(length(args)==0){
   wave <- args[[1]]
 }
 
+# Specify index date
+if (wave=="wave1") { index_date <- config$wave1$start_date }
+if (wave=="wave2") { index_date <- config$wave2$start_date }
+if (wave=="wave3") { index_date <- config$wave3$start_date }
+if (wave=="wave4") { index_date <- config$wave4$start_date }
+
 # Load data ---
 # Find input file names by globbing
 input_files <- Sys.glob(here("output", "input_wave*.csv.gz"))
@@ -46,7 +52,8 @@ input_file_wave <- input_files[str_detect(input_files, wave)]
 
 # Extract data from the input_files and formats columns to correct type 
 # (e.g., integer, logical etc)
-data_extracted <- extract_data(file_name = input_file_wave)
+data_extracted <- extract_data(file_name = input_file_wave) %>%
+  mutate(index_date = as.Date(index_date, format = "%Y-%m-%d"))
 
 ## Add kidney columns to data (egfr and ckd_rrt)
 data_extracted_with_kidney_vars <- add_kidney_vars_to_data(data_extracted = data_extracted)
@@ -58,7 +65,7 @@ data_processed <- process_data(data_extracted_with_kidney_vars)
 data_processed <- data_processed %>%
   add_n_doses() %>%
   last_dose_pre_era(era="delta") %>%
-  last_dose_pre_era(era="omcicron") %>%
+  last_dose_pre_era(era="omicron") %>%
   first_dose_post_era(era="alpha") %>%
   first_dose_post_era(era="delta") %>%
   first_dose_post_era(era="omicron") 

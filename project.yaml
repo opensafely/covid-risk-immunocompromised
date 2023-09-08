@@ -39,6 +39,17 @@ actions:
     run: r:latest analysis/data_selection.R wave4
     needs: [process_data_wave4]
     outputs:
-      moderately_sensitive:
+      highly_sensitive:
         rds: output/filtered/input_wave4.rds
+      moderately_sensitive:
         csv: output/flowchart/flowchart_wave4.csv
+
+  # Table 1
+  table_1_wave4:
+    run: r:latest analysis/table_1.R wave4
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4.rds
+      moderately_sensitive:
+        table: output/tables/table_1_wave4.html
