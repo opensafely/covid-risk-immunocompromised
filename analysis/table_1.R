@@ -10,6 +10,7 @@
 library(tidyverse)
 library(here)
 library(glue)
+library(dplyr)
 library(gt)
 library(gtsummary)
 library(reshape2)
@@ -21,7 +22,7 @@ if(length(args)==0){
   subgroup <- "all"
 } else {
   wave <- args[[1]]
-  subgroup <- args[[2]]
+  subgroup <- "all"
 }
 
 # Import function to rename subgroups
@@ -139,4 +140,4 @@ table1_redacted <- table1_redacted %>% select(-non_count, -count, -percent)
 output_dir <- here("output", "table_1")
 fs::dir_create(output_dir)
 gt::gtsave(gt(table1_redacted), here::here("output","table_1", paste0("table_1_",wave,".html")))
-write_rds(table1_redacted, here::here("output", "tables", paste0("table_1_",wave,".rds")), compress = "gz")
+write_rds(table1_redacted, here::here("output", "table_1", paste0("table_1_",wave,".rds")), compress = "gz")
