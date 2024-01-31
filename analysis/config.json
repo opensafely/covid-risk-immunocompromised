@@ -33,6 +33,9 @@
         "immunosuppression_medication",
         "immunosuppression_medication_date",
         "immunosuppression_medication_cat",
+        "immunosuppression_admin",
+        "immunosuppression_admin_date",
+        "immunosuppression_admin_cat",
         "radio_chemo",
         "radio_chemo_date",
         "radio_chemo_cat"

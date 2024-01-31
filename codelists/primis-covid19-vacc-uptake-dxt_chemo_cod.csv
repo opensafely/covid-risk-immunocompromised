@@ -1,23 +1,55 @@
 code,term
-10611004,Teleradiotherapy protons
+103081004,Immunodeficiency secondary to chemotherapy
+10611004,External beam radiation therapy protons
 1103251000000108,Injection of chemotherapeutic substance into tumour using ultrasonographic guidance
 1127003,Interstitial radium application
-113117004,Teleradiotherapy particulate radiation
+113117004,External beam radiation therapy particulate radiation
 11331000224100,Tomotherapy
+1141994004,"Rituximab, cyclophosphamide, etoposide, vincristine, prednisone antineoplastic chemotherapy regimen"
+1148692008,Radiation therapy following chemotherapy
 1149431000000106,Intraoperative electron radiotherapy
+1156505006,External beam radiation therapy using carbon ions
+1156506007,External beam radiation therapy using photons
+1156524009,Intensity modulated external beam neutron radiation therapy
+1156525005,Mixed beam external beam radiation therapy
+1156526006,Two dimensional external beam radiation therapy
+1156528007,External beam radiation therapy using particle spot scanning technique
+1156529004,External beam radiation therapy using particle passive scattering technique
+1156530009,Volumetric modulated arc therapy
 115959002,Stereotactic radiosurgery
 115960007,Total skin electron beam therapy
+1162782007,Three dimensional external beam radiation therapy
+1163157007,Ultra high dose rate radiotherapy
 1167461000000101,Intra-arterial injection of antineoplastic agent into left ophthalmic artery using fluoroscopic guidance with contrast
 1167471000000108,Intra-arterial injection of antineoplastic agent into right ophthalmic artery using fluoroscopic guidance with contrast
 1167481000000105,Intra-arterial injection of antineoplastic agent into bilateral ophthalmic arteries using fluoroscopic guidance with contrast
+1172516002,High-dose chemotherapy with stem cell transplant
+1177084005,Myelosuppression due to chemotherapy
 118640001,Radioimmunotherapy
+118791000119106,Aplastic anemia caused by antineoplastic agent
+1204242009,External beam radiation therapy using particle scanning technique
 12149006,"Chemotherapy administration, subcutaneous, with local anesthesia"
+1254741007,Intensification antineoplastic therapy regimen
+1254742000,Delayed intensification antineoplastic therapy regimen
+1255359001,Fractionated dose stereotactic radiation therapy
+1255831008,Chemotherapy for malignant neoplastic disease using targeted agent
+1255834000,Administration of antineoplastic chemotherapy into peritoneal cavity
+1255904006,Administration of palliative antineoplastic agent
+1259200004,Neoadjuvant antineoplastic chemotherapy
+1263392007,Extracorporeal irradiation of tumor bearing bone and reimplantation
+1362501000000105,Laparoscopic administration of pressurised aerosol antineoplastic agent into peritoneal cavity
+136281000119109,Anemia caused by antineoplastic agent
 16554781000119103,Intravenous radionuclide therapy using strontium 89
 16554931000119102,Intravenous radionuclide therapy using radium 223 dichloride
 16560241000119104,Oral radionuclide therapy
+168520004,Radiotherapy for immunosuppression
+168521000,Radiotherapy for hemopoietic irradiation
+168522007,Radiotherapy for lymphatic irradiation
 168523002,Preoperative course of radiotherapy
 168525009,Postoperative course of radiotherapy
+168528006,Palliative course of radiotherapy
 168531007,Radiotherapy started
+168532000,Radiotherapy changed
 169291001,X-ray beam therapy
 169292008,Grenz ray therapy up to 10 kV
 169293003,Superficial X-ray therapy 10-60 kV
@@ -44,11 +76,11 @@ code,term
 169318005,Fast neutron therapy
 169319002,Combined heavy particle therapy
 169331000,Combined radiotherapy
-169332007,External beam with internal radiotherapy
+169332007,External beam radiation therapy with internal radiotherapy
 169333002,External beam - surgery with preoperative radiotherapy
 169334008,External beam - surgery with postoperative radiotherapy
 169335009,External beam - surgery with chemotherapy
-169336005,External beam with chemotherapy
+169336005,External beam radiation therapy with chemotherapy
 169340001,Internal metabolic radiotherapy
 169342009,Thyroid tumor/metastasis irradiation
 169343004,Bone marrow suppression - irradiation
@@ -82,14 +114,14 @@ code,term
 228662001,Betatron X-ray therapy
 228663006,Microtron X-ray therapy
 228664000,Van der Graaff X-ray therapy
-228666003,Teletherapy with dual headed cobalt unit
-228667007,Stereotactic cobalt teletherapy
-228671005,Linear accelerator electron teletherapy
-228672003,Microtron electron teletherapy
-228673008,Strontium 90 electron teletherapy
-228674002,Cyclotron neutron teletherapy
-228675001,Deuterium on tritium neutron teletherapy
-228676000,Hiletron neutron teletherapy
+228666003,External beam radiation therapy with dual headed cobalt unit
+228667007,Stereotactic cobalt external beam radiation therapy
+228671005,Linear accelerator electron external beam radiation therapy
+228672003,Microtron electron external beam radiation therapy
+228673008,Strontium 90 electron external beam radiation therapy
+228674002,Cyclotron neutron external beam radiation therapy
+228675001,Deuterium on tritium neutron external beam radiation therapy
+228676000,Hiletron neutron external beam radiation therapy
 228681009,Cobalt 60 brachytherapy
 228682002,Cobalt 60 brachytherapy manual loading
 228690002,Iodine 125 brachytherapy
@@ -126,32 +158,35 @@ code,term
 29391003,Chemotherapy administration into peritoneal cavity requiring paracentesis
 309698005,Continuous infusion of chemotherapy
 312244008,Cobalt 60 brachytherapy remote afterloading
-312248006,Heavy ion teletherapy
+312248006,Heavy ion external beam radiation therapy
 314604005,Palliative course of deep X-ray therapy
 314605006,Preoperative course of deep X-ray therapy
 314606007,Postoperative course of deep X-ray therapy
 315601005,Ambulatory chemotherapy
 31632008,Stereotactic focused proton beam on cerebrum
 31652009,Intracavitary chemotherapy for malignant neoplasm
-33195004,Teleradiotherapy procedure
-33356009,Betatron teleradiotherapy
+328301000119102,Pancytopenia due to antineoplastic chemotherapy
+33195004,External beam radiation therapy procedure
+33356009,Betatron external beam radiation therapy
+350691000119103,Agranulocytosis due to and following administration of antineoplastic agent
 363688001,Administration of antineoplastic agent
 367336001,Chemotherapy
 380021000000105,Megavoltage treatment for adaptive radiotherapy
 380031000000107,Megavoltage treatment for simple radiotherapy
 380041000000103,Megavoltage treatment for complex radiotherapy
-38104006,Teleradiotherapy by linear accelerator
+38104006,External beam radiation therapy by linear accelerator
 38216008,Infusion chemotherapy for malignant neoplasm
 394894008,Pre-operative chemotherapy
 394895009,Postoperative chemotherapy
 394918006,Iodine seed radiotherapy
 394934009,Combined pre-operative chemotherapy and radiotherapy
-394935005,Combined post-operative chemotherapy and radiotherapy
+394935005,Combined postoperative chemotherapy and radiotherapy
 395096001,Stereotactic radiotherapy
 39646005,Hemibody irradiation
 396780003,Chemotherapy AND/OR radiation therapy prior to lymphadenectomy
 399042005,Chemotherapy cycle
 399180008,Interstitial radioactive colloid therapy
+399213007,Toxicity due to chemotherapy
 399315003,Radionuclide therapy
 4114003,Parenteral chemotherapy for malignant neoplasm
 427541000119103,Intravenous radionuclide therapy
@@ -185,17 +220,19 @@ code,term
 448461009,Stereotactic radiation therapy using megavoltage radiation
 449290006,Megavoltage radiation therapy using photons and electrons
 450827009,Induction chemotherapy
-45643008,Teleradiotherapy using electrons
+45643008,External beam radiation therapy using electrons
 46044009,Megavoltage radiation therapy
 468111000000107,[X]Other chemotherapy
 473237008,Stereotactic radiosurgery for acoustic neuroma
 47479005,Total body irradiation
 47668009,Intracavitary radium application
-50632006,Cyclotron teleradiotherapy
+50080191000188103,External beam radiation therapy of bone
+50080231000188105,Radiotherapy to face
+50632006,Cyclotron external beam radiation therapy
 51534007,Oral chemotherapy for malignant neoplasm
 5304008,"Deep radiation therapy, 200-300 KVP"
 589631000119102,Intravenous radioimmunotherapy using monoclonal antibodies
-62867004,Teleradiotherapy with radioactive cesium
+62867004,External beam radiation therapy with radioactive cesium
 64134004,Stereotactic focused gamma radiosurgery of cerebrum
 64291000052106,Radioactive iodine therapy
 65952009,Gamma ray therapy
@@ -216,13 +253,15 @@ code,term
 722480002,Chemotherapy started
 722482005,"Doxorubicin, bleomycin, vinblastine and dacarbazine chemotherapy regimen"
 722491009,"Rituximab, cyclophosphamide, doxorubicin, vincristine and prednisone chemotherapy regimen"
-74023000,Teleradiotherapy of 1 to 25 mega electronvolt protons
-77613002,Teleradiotherapy with iodine-125
+74023000,External beam radiation therapy of 1 to 25 mega electronvolt protons
+767657005,Anemia due to and following chemotherapy
+767658000,Neutropenia due to and following chemotherapy
+77613002,External beam radiation therapy with iodine-125
 77738002,Local chemotherapy for malignant neoplasm
 782204001,Superficial radiation therapy
 785706005,Hypofractionated radiation therapy of prostate
 785707001,Hypofractionated radiation therapy of entire breast
-80347004,Teleradiotherapy neutrons
+80347004,External beam radiation therapy neutrons
 816151001,Administration of consolidation antineoplastic agent
 819971000000103,Hyperthermic intraoperative peritoneal chemotherapy
 829591000000101,Neoadjuvant chemotherapy

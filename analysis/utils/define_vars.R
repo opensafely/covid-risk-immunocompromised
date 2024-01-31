@@ -167,6 +167,7 @@ process_data <- function(data_extracted) {
       time_since_haem_cancer = as.numeric(index_date - haem_cancer_date),
       time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
       time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
+      time_since_immunosuppression_admin = as.numeric(index_date - immunosuppression_admin_date),
       time_since_radio_chemo = as.numeric(index_date - radio_chemo_date),
       
       # Define time since immunosuppression categories
@@ -198,6 +199,11 @@ process_data <- function(data_extracted) {
         is.na(time_since_immunosuppression_medication) ~ "Absent",
         time_since_immunosuppression_medication>90 ~ ">3 months",
         time_since_immunosuppression_medication>=0 & time_since_immunosuppression_medication<=90 ~ "<=3 months",
+        TRUE ~ NA_character_
+      ),
+      immunosuppression_admin_cat = fct_case_when(
+        is.na(time_since_immunosuppression_admin) ~ "Absent",
+        !is.na(time_since_immunosuppression_admin) ~ "Present",
         TRUE ~ NA_character_
       ),
       radio_chemo_cat = fct_case_when(

@@ -60,6 +60,13 @@ immunosuppression_medication_codes = codelist_from_csv(
     column="code",
 )
 
+# Immunosuppressive administrative codes
+immunosuppression_admin_codes = codelist_from_csv(
+    "codelists/primis-covid19-vacc-uptake-immunosuppression-admin-codes.csv",
+    system="snomed",
+    column="code",
+)
+
 # Radiotherapy/chemotherapy
 radio_chemo_codes = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-dxt_chemo_cod.csv",

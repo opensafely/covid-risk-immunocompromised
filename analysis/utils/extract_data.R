@@ -56,6 +56,7 @@ extract_data <- function(file_name) {
         haem_cancer = col_logical(),
         immunosuppression_diagnosis = col_logical(),
         immunosuppression_medication = col_logical(),
+        immunosuppression_admin = col_logical(),
         radio_chemo = col_logical(),
         
         # immunosuppression (dates)
@@ -64,6 +65,7 @@ extract_data <- function(file_name) {
         haem_cancer_date = col_date(format = "%Y-%m-%d"),
         immunosuppression_diagnosis_date = col_date(format = "%Y-%m-%d"),
         immunosuppression_medication_date = col_date(format = "%Y-%m-%d"),
+        immunosuppression_admin_date = col_date(format = "%Y-%m-%d"),
         radio_chemo_date = col_date(format = "%Y-%m-%d"),
         
         # comorbidities (multilevel)

@@ -76,6 +76,7 @@ counts <- data_filtered %>%
          haem_cancer_cat,
          immunosuppression_diagnosis_cat,
          immunosuppression_medication_cat,
+         immunosuppression_admin_cat,
          radio_chemo_cat,
          
          # Vaccination

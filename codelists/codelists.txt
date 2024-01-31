@@ -2,11 +2,13 @@ opensafely/other-organ-transplant/79caeeee/
 opensafely/kidney-transplant/2020-07-15
 opensafely/bone-marrow-transplant/2020-04-15
 opensafely/haematological-cancer/2020-04-15
-primis-covid19-vacc-uptake/immdx_cov/v1
-primis-covid19-vacc-uptake/immrx/v1
-primis-covid19-vacc-uptake/dxt_chemo_cod/v.1.5.3
+primis-covid19-vacc-uptake/immdx_cov/v2.5
+primis-covid19-vacc-uptake/immrx/v2.5
+primis-covid19-vacc-uptake/dxt_chemo_cod/v2.5
+primis-covid19-vacc-uptake/longres/v2.5
+primis-covid19-vacc-uptake/sev_mental/v2.5
+primis-covid19-vacc-uptake/immunosuppression-admin-codes/v2.5
 opensafely/ethnicity/2020-04-27
-primis-covid19-vacc-uptake/longres/v1
 opensafely/smoking-clear/2020-04-29
 opensafely/hypertension/2020-04-28
 opensafely/chronic-respiratory-disease/2020-04-10
@@ -26,7 +28,6 @@ opensafely/sickle-cell-disease/2020-04-14
 opensafely/asplenia/2020-06-02
 opensafely/ra-sle-psoriasis/2020-04-14
 nhsd-primary-care-domain-refsets/ld_cod/20210127
-primis-covid19-vacc-uptake/sev_mental/v1
 opensafely/covid-identification-in-primary-care-probable-covid-clinical-code/2020-07-16
 opensafely/covid-identification-in-primary-care-probable-covid-positive-test/2020-07-16
 opensafely/covid-identification-in-primary-care-probable-covid-sequelae/2020-07-16

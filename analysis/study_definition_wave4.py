@@ -133,6 +133,17 @@ study = StudyDefinition(
         date_format="YYYY-MM-DD",
     ),
     
+    # Immunosuppression admin code
+    immunosuppression_admin = patients.with_these_medications(
+        codelists.immunosuppression_admin_codes,
+        returning="binary_flag",
+        #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
+        between=["2020-07-01","index_date"], # use for waves 3 and 4
+        find_last_match_in_period=True,
+        include_date_of_match=True, # variable: immunosuppression_admin_date
+        date_format="YYYY-MM-DD",
+    ),
+    
     # Radiotherapy/chemotherapy
     radio_chemo = patients.with_these_medications(
         codelists.radio_chemo_codes,
