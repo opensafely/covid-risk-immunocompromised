@@ -134,7 +134,7 @@ study = StudyDefinition(
     ),
     
     # Immunosuppression admin code
-    immunosuppression_admin = patients.with_these_medications(
+    immunosuppression_admin = patients.with_these_clinical_events(
         codelists.immunosuppression_admin_codes,
         returning="binary_flag",
         #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
@@ -145,7 +145,7 @@ study = StudyDefinition(
     ),
     
     # Radiotherapy/chemotherapy
-    radio_chemo = patients.with_these_medications(
+    radio_chemo = patients.with_these_clinical_events(
         codelists.radio_chemo_codes,
         returning="binary_flag",
         #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
