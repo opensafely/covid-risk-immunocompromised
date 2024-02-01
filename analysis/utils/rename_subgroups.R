@@ -47,6 +47,7 @@ rename_subgroups <- function(table){
         subgroup == "haem_cancer_cat" ~ "Haematological malignancy",
         subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
         subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
+        subgroup == "immunosuppression_admin_cat" ~ "Immunosuppression (admin)",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         
         # Comorbidities (multiple levels)
