@@ -86,6 +86,9 @@ counts <- data_filtered %>%
          # Prior infection group
          pre_omicron_infection_group,
          
+         ## At risk morbidity count
+         multimorb_cat,
+         
          ## Risk group (clinical)
          asthma,
          diabetes_controlled,

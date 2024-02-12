@@ -161,6 +161,20 @@ process_data <- function(data_extracted) {
         ckd_rrt == "RRT (transplant)" ~ "RRT (transplant)"
       ),
       
+      multimorb =
+        (chronic_respiratory_disease | asthma!="No asthma") +
+        (chronic_cardiac_disease | bp_ht) +
+        (ckd_rrt != "No CKD or RRT") +
+        (chronic_liver_disease) +
+        (stroke | dementia | other_neuro | learning_disability) +
+        (diabetes_controlled != "No diabetes")+
+        (asplenia) +
+        (bmi=="Obese III (40+ kg/m2)") +
+        sev_mental_ill + 
+        0,
+      multimorb_cat = cut(multimorb, breaks = c(0, 1, 2, 3, 4, Inf), labels=c("0", "1", "2", "3", "4+"), right=FALSE),
+      
+      
       # Define time since immunosuppression records
       time_since_organ_transplant = as.numeric(index_date - organ_transplant_date),
       time_since_bone_marrow_transplant = as.numeric(index_date - bone_marrow_transplant_date),

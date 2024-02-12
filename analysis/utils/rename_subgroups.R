@@ -50,6 +50,9 @@ rename_subgroups <- function(table){
         subgroup == "immunosuppression_admin_cat" ~ "Immunosuppression (admin)",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         
+        # At risk morbidity count
+        subgroup == "multimorb_cat" ~ "Comorbidity count",
+        
         # Comorbidities (multiple levels)
         subgroup == "asthma" ~ "Asthma",
         subgroup == "diabetes_controlled" ~ "Diabetes",

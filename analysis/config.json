@@ -55,7 +55,8 @@
         "asplenia",
         "ra_sle_psoriasis",
         "learning_disability",
-        "sev_mental_ill"
+        "sev_mental_ill",
+        "multimorb_cat"
     ],
     "era_infection_vars" : [
         "wt_start_date",
