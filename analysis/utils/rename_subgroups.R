@@ -40,12 +40,18 @@ rename_subgroups <- function(table){
         subgroup == "pre_wave_infection_group" ~ "Prior infection status",
         
         # Immunosuppression
-        subgroup == "any_transplant_cat" ~ "Organ transplant",
-        subgroup == "any_transplant_cat_broad" ~ "Organ transplant (broad)",
+        subgroup == "any_transplant_cat_broad" ~ "Organ transplant",
         subgroup == "haem_cancer_cat" ~ "Haematological malignancy",
         subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
         subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
+        
+        # Immunosuppression (binary)
+        subgroup == "any_transplant" ~ "Organ transplant",
+        subgroup == "haem_cancer" ~ "Haematological malignancy",
+        subgroup == "immunosuppression_diagnosis" ~ "Immunosuppression (diagnosis)",
+        subgroup == "immunosuppression_medication" ~ "Immunosuppression (medication)",
+        subgroup == "radio_chemo" ~ "Radiotherapy/Chemotherapy",
         
         # At risk morbidity count
         subgroup == "multimorb_cat" ~ "Comorbidity count",

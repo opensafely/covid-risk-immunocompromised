@@ -71,12 +71,18 @@ counts <- data_filtered %>%
          care_home,
 
          # Immunosuppression
-         any_transplant_cat,
          any_transplant_cat_broad,
          haem_cancer_cat,
          immunosuppression_diagnosis_cat,
          immunosuppression_medication_cat,
          radio_chemo_cat,
+         
+         # Immunosuppression (binary)
+         any_transplant,
+         haem_cancer,
+         immunosuppression_diagnosis,
+         immunosuppression_medication,
+         radio_chemo,
          
          # Vaccination
          n_doses_wave,
@@ -106,6 +112,26 @@ counts <- data_filtered %>%
          learning_disability,
          sev_mental_ill
          )
+
+# Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
+if (subgroup=="all") {
+  counts = counts %>% select(-c(any_transplant, haem_cancer, immunosuppression_diagnosis, immunosuppression_medication, radio_chemo))
+}
+if (subgroup=="transplant") {
+  counts = counts %>% select(-c(haem_cancer_cat, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo_cat, any_transplant))
+}
+if (subgroup=="haem_cancer") {
+  counts = counts %>% select(-c(any_transplant_cat_broad, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo_cat, haem_cancer))
+}
+if (subgroup=="imd") {
+  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_medication_cat, radio_chemo_cat, immunosuppression_diagnosis))
+}
+if (subgroup=="imm") {
+  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_diagnosis_cat, radio_chemo_cat, immunosuppression_medication))
+}
+if (subgroup=="radio_chemo") {
+  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo))
+} 
 
 ## Create table 1
 counts_summary = counts %>% tbl_summary()
