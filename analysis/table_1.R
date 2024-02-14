@@ -22,7 +22,7 @@ if(length(args)==0){
   subgroup <- "all"
 } else {
   wave <- args[[1]]
-  subgroup <- "all"
+  subgroup <- args[[2]]
 }
 
 # Import function to rename subgroups
@@ -42,8 +42,10 @@ if (subgroup=="all") {
   data_filtered = subset(data_filtered, organ_transplant==1 | bone_marrow_transplant==1)
 } else if (subgroup=="haem_cancer") {
   data_filtered = subset(data_filtered, haem_cancer==1)
-} else if (subgroup=="immuno") {
-  data_filtered = subset(data_filtered, immunosuppression_diagnosis==1 | immunosuppression_medication==1)
+} else if (subgroup=="imd") {
+  data_filtered = subset(data_filtered, immunosuppression_diagnosis==1)
+} else if (subgroup=="imm") {
+  data_filtered = subset(data_filtered, immunosuppression_medication==1)
 } else if (subgroup=="radio_chemo") {
   data_filtered = subset(data_filtered, radio_chemo==1)
 } else {
@@ -60,36 +62,34 @@ data_filtered <- data_filtered %>%
 counts <- data_filtered %>%
   select(N,
          
-         ## Demographics
+         # Demographics
          agegroup,
          sex,
          ethnicity,
          region,
          imd,
          care_home,
-         bmi,
-         smoking_status_comb,
 
          # Immunosuppression
-         organ_transplant_cat,
-         bone_marrow_transplant_cat,
+         any_transplant_cat,
+         any_transplant_cat_broad,
          haem_cancer_cat,
          immunosuppression_diagnosis_cat,
          immunosuppression_medication_cat,
-         immunosuppression_admin_cat,
          radio_chemo_cat,
          
          # Vaccination
-         n_doses_omicron,
-         pre_omicron_vaccine_group,
+         n_doses_wave,
+         pre_wave_vaccine_group,
          
          # Prior infection group
-         pre_omicron_infection_group,
+         pre_wave_infection_group,
          
-         ## At risk morbidity count
+         # At risk morbidity count
          multimorb_cat,
          
          ## Risk group (clinical)
+         bmi,
          asthma,
          diabetes_controlled,
          ckd_rrt,
@@ -143,5 +143,6 @@ table1_redacted <- table1_redacted %>% select(-non_count, -count, -percent)
 ## Save as html/rds
 output_dir <- here("output", "table_1")
 fs::dir_create(output_dir)
-gt::gtsave(gt(table1_redacted), here::here("output","table_1", paste0("table_1_",wave,".html")))
-write_rds(table1_redacted, here::here("output", "table_1", paste0("table_1_",wave,".rds")), compress = "gz")
+gt::gtsave(gt(table1_redacted), here::here("output","table_1", paste0("table_1_",wave,"_",subgroup,".html")))
+write_csv(table1_redacted, here::here("output", "table_1",  paste0("table_1_",wave,"_",subgroup,".csv")))
+write_rds(table1_redacted, here::here("output", "table_1", paste0("table_1_",wave,"_",subgroup,".rds")), compress = "gz")

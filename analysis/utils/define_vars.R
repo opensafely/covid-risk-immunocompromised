@@ -176,25 +176,26 @@ process_data <- function(data_extracted) {
       
       
       # Define time since immunosuppression records
-      time_since_organ_transplant = as.numeric(index_date - organ_transplant_date),
-      time_since_bone_marrow_transplant = as.numeric(index_date - bone_marrow_transplant_date),
       time_since_haem_cancer = as.numeric(index_date - haem_cancer_date),
       time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
       time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
-      time_since_immunosuppression_admin = as.numeric(index_date - immunosuppression_admin_date),
       time_since_radio_chemo = as.numeric(index_date - radio_chemo_date),
       
-      # Define time since immunosuppression categories
-      organ_transplant_cat = fct_case_when(
-        is.na(time_since_organ_transplant) ~ "Absent",
-        time_since_organ_transplant>365 ~ ">1 year",
-        time_since_organ_transplant>=0 & time_since_organ_transplant<=365 ~ "<=1 year",
+      # Define immunosuppression categories
+      any_transplant = as.numeric(!is.na(organ_transplant_date) | !is.na(bone_marrow_transplant_date)),
+      any_transplant_date = pmax(organ_transplant_date, bone_marrow_transplant_date, na.rm=TRUE),
+      
+      any_transplant_cat = fct_case_when(
+        is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date) ~ "Absent",
+        is.na(organ_transplant_date) & !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
+        !is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date)  ~ "Solid organ",
+        !is.na(organ_transplant_date) & !is.na(bone_marrow_transplant_date)  ~ "Bone marrow & solid organ",
         TRUE ~ NA_character_
       ),
-      bone_marrow_transplant_cat = fct_case_when(
-        is.na(time_since_bone_marrow_transplant) ~ "Absent",
-        time_since_bone_marrow_transplant>365 ~ ">1 year",
-        time_since_bone_marrow_transplant>=0 & time_since_bone_marrow_transplant<=365 ~ "<=1 year",
+      any_transplant_cat_broad = fct_case_when(
+        is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date) ~ "Absent",
+        !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
+        !is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date)  ~ "Solid organ",
         TRUE ~ NA_character_
       ),
       haem_cancer_cat = fct_case_when(
@@ -215,15 +216,10 @@ process_data <- function(data_extracted) {
         time_since_immunosuppression_medication>=0 & time_since_immunosuppression_medication<=90 ~ "<=3 months",
         TRUE ~ NA_character_
       ),
-      immunosuppression_admin_cat = fct_case_when(
-        is.na(time_since_immunosuppression_admin) ~ "Absent",
-        !is.na(time_since_immunosuppression_admin) ~ "Present",
-        TRUE ~ NA_character_
-      ),
       radio_chemo_cat = fct_case_when(
         is.na(time_since_radio_chemo) ~ "Absent",
-        time_since_radio_chemo>90 ~ ">3 months",
-        time_since_radio_chemo>=0 & time_since_radio_chemo<=90 ~ "<=3 months",
+        time_since_radio_chemo>182 ~ ">6 months",
+        time_since_radio_chemo>=0 & time_since_radio_chemo<=182 ~ "<=6 months",
         TRUE ~ NA_character_
       ),
       

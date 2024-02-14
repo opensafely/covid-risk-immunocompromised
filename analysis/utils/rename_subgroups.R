@@ -33,27 +33,25 @@ rename_subgroups <- function(table){
         subgroup == "region" ~ "Region",
         subgroup == "imd" ~ "IMD quintile",
         subgroup == "care_home" ~ "Care home",
-        subgroup == "bmi" ~ "Body Mass Index",
-        subgroup == "smoking_status_comb" ~ "Smoking status",
-        
+
         # Vaccine/Infection
-        subgroup == "n_doses_omicron" ~ "N prior doses",
-        subgroup == "pre_omicron_vaccine_group" ~ "Timing of last dose",
-        subgroup == "pre_omicron_infection_group" ~ "Prior infection status",
+        subgroup == "n_doses_wave" ~ "N prior doses",
+        subgroup == "pre_wave_vaccine_group" ~ "Timing of last dose",
+        subgroup == "pre_wave_infection_group" ~ "Prior infection status",
         
         # Immunosuppression
-        subgroup == "organ_transplant_cat" ~ "Organ transplant",
-        subgroup == "bone_marrow_transplant_cat" ~ "Bone marrow transplant",
+        subgroup == "any_transplant_cat" ~ "Organ transplant",
+        subgroup == "any_transplant_cat_broad" ~ "Organ transplant (broad)",
         subgroup == "haem_cancer_cat" ~ "Haematological malignancy",
         subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
         subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
-        subgroup == "immunosuppression_admin_cat" ~ "Immunosuppression (admin)",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         
         # At risk morbidity count
         subgroup == "multimorb_cat" ~ "Comorbidity count",
         
         # Comorbidities (multiple levels)
+        subgroup == "bmi" ~ "Body Mass Index",
         subgroup == "asthma" ~ "Asthma",
         subgroup == "diabetes_controlled" ~ "Diabetes",
         subgroup == "ckd_rrt" ~ "Chronic kidney disease or renal replacement therapy",

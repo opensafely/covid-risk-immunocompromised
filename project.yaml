@@ -45,11 +45,62 @@ actions:
         csv: output/flowchart/flowchart_wave4.csv
 
   # Table 1
-  table_1_wave4:
-    run: r:latest analysis/table_1.R wave4
+  table_1_wave4_all:
+    run: r:latest analysis/table_1.R wave4 all
     needs: [filter_data_wave4]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave4.rds
+        data: output/table_1/table_1_wave4_all.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave4.html
+        table: output/table_1/table_1_wave4_all.html
+        csv: output/table_1/table_1_wave4_all.csv
+        
+  table_1_wave4_transplant:
+    run: r:latest analysis/table_1.R wave4 transplant
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_transplant.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_transplant.html
+        csv: output/table_1/table_1_wave4_transplant.csv
+
+  table_1_wave4_haem_cancer:
+    run: r:latest analysis/table_1.R wave4 haem_cancer
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_haem_cancer.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_haem_cancer.html
+        csv: output/table_1/table_1_wave4_haem_cancer.csv
+
+  table_1_wave4_imm:
+    run: r:latest analysis/table_1.R wave4 imm
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_imm.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_imm.html
+        csv: output/table_1/table_1_wave4_imm.csv
+
+  table_1_wave4_imd:
+    run: r:latest analysis/table_1.R wave4 imd
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_imd.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_imd.html
+        csv: output/table_1/table_1_wave4_imd.csv
+
+  table_1_wave4_radio_chemo:
+    run: r:latest analysis/table_1.R wave4 radio_chemo
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_radio_chemo.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_radio_chemo.html
+        csv: output/table_1/table_1_wave4_radio_chemo.csv

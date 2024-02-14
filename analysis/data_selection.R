@@ -25,26 +25,6 @@ data_processed <- read_rds(here::here("output", "processed", paste0("input_",wav
 # Function fct_case_when needed inside process_data
 source(here("analysis", "utils", "fct_case_when.R"))                           
 
-# Define last exposure
-if (wave == "wave1") { 
-  data_processed <- data_processed %>% 
-    mutate(time_since_last_infection = NA)
-}
-if (wave == "wave2") { 
-  data_processed <- data_processed %>% 
-    mutate(time_since_last_infection = pre_alpha_infection_days)
-}
-if (wave == "wave3") { 
-  data_processed <- data_processed %>% 
-    mutate(time_since_last_infection = pre_delta_infection_days)
-}
-if (wave == "wave4") { 
-  data_processed <- data_processed %>% 
-    mutate(time_since_last_infection = pre_omicron_infection_days)
-}
-
-
-
 # Define selection criteria
 data_criteria <- data_processed %>%
   transmute(
@@ -66,19 +46,20 @@ data_criteria <- data_processed %>%
     has_region = !is.na(region),
     
     # Postvax events
-    severe_date_check = is.na(covid_severe_date) | covid_severe_date>omicron_start_date,
-    death_date_check = is.na(covid_death_date) | covid_death_date>omicron_start_date,
-    noncoviddeath_date_check = is.na(died_any_date) | died_any_date>omicron_start_date,
+    severe_date_check = is.na(covid_severe_date) | covid_severe_date>wave_start_date,
+    death_date_check = is.na(covid_death_date) | covid_death_date>wave_start_date,
+    noncoviddeath_date_check = is.na(died_any_date) | died_any_date>wave_start_date,
+    dereg_date_check = is.na(dereg_date) | dereg_date>wave_start_date,
     
     # No covid in past 90 days
-    no_recent_covid = is.na(time_since_last_infection) | time_since_last_infection>90,
+    no_recent_covid = is.na(pre_wave_infection_days) | pre_wave_infection_days>90,
     
     # Define primary outcome study population
     include = (
       has_follow_up & has_age & has_sex &
       is_ICP &
       has_imd & has_ethnicity & has_region &
-      severe_date_check & death_date_check & noncoviddeath_date_check &
+      severe_date_check & death_date_check & noncoviddeath_date_check & dereg_date_check &
       no_recent_covid
      )
   )
@@ -101,7 +82,7 @@ data_flowchart <- data_criteria %>%
     c0 = (study_definition & has_follow_up & has_age & has_sex),
     c1 = c0 & is_ICP,
     c2 = c1 & (has_imd & has_ethnicity & has_region),
-    c3 = c2 & (severe_date_check & death_date_check & noncoviddeath_date_check),
+    c3 = c2 & (severe_date_check & death_date_check & noncoviddeath_date_check & dereg_date_check),
     c4 = c3 & no_recent_covid,
   ) %>%
   summarise(

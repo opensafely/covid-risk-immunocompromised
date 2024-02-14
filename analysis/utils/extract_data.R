@@ -130,9 +130,13 @@ extract_data <- function(file_name) {
     # add era start dates
     mutate(
       wt_start_date = as.Date("2020-03-23", format = "%Y-%m-%d"),
+      wt_end_date = as.Date("2020-05-30", format = "%Y-%m-%d"),
       alpha_start_date = as.Date("2020-09-07", format = "%Y-%m-%d"),
+      alpha_end_date = as.Date("2021-04-24", format = "%Y-%m-%d"),
       delta_start_date = as.Date("2021-05-28", format = "%Y-%m-%d"),
+      delta_end_date = as.Date("2021-12-14", format = "%Y-%m-%d"),
       omicron_start_date = as.Date("2021-12-15", format = "%Y-%m-%d"),
+      omicron_end_date = as.Date("2022-04-29", format = "%Y-%m-%d"),
     ) %>%
     # Floor dates to avoid timestamps causing inequalities for dates on the same day
     mutate(across(where(is.Date), 
