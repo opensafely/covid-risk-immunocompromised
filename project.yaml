@@ -64,88 +64,92 @@ actions:
         table: output/table_1/table_1_wave4_all.html
         csv: output/table_1/table_1_wave4_all.csv
         
-  table_1_wave4_transplant:
-    run: r:latest analysis/table_1.R wave4 transplant
+  table_1_wave4_Tx:
+    run: r:latest analysis/table_1.R wave4 Tx
     needs: [filter_data_wave4]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave4_transplant.rds
+        data: output/table_1/table_1_wave4_Tx.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave4_transplant.html
-        csv: output/table_1/table_1_wave4_transplant.csv
+        table: output/table_1/table_1_wave4_Tx.html
+        csv: output/table_1/table_1_wave4_Tx.csv
 
-  table_1_wave4_haem_cancer:
-    run: r:latest analysis/table_1.R wave4 haem_cancer
+  table_1_wave4_HC:
+    run: r:latest analysis/table_1.R wave4 HC
     needs: [filter_data_wave4]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave4_haem_cancer.rds
+        data: output/table_1/table_1_wave4_HC.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave4_haem_cancer.html
-        csv: output/table_1/table_1_wave4_haem_cancer.csv
+        table: output/table_1/table_1_wave4_HC.html
+        csv: output/table_1/table_1_wave4_HC.csv
 
-  table_1_wave4_imm:
-    run: r:latest analysis/table_1.R wave4 imm
+  table_1_wave4_RC:
+    run: r:latest analysis/table_1.R wave4 RC
     needs: [filter_data_wave4]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave4_imm.rds
+        data: output/table_1/table_1_wave4_RC.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave4_imm.html
-        csv: output/table_1/table_1_wave4_imm.csv
+        table: output/table_1/table_1_wave4_RC.html
+        csv: output/table_1/table_1_wave4_RC.csv
+        
+  table_1_wave4_IMM:
+    run: r:latest analysis/table_1.R wave4 IMM
+    needs: [filter_data_wave4]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave4_IMM.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave4_IMM.html
+        csv: output/table_1/table_1_wave4_IMM.csv
 
-  table_1_wave4_imd:
-    run: r:latest analysis/table_1.R wave4 imd
+  table_1_wave4_IMD:
+    run: r:latest analysis/table_1.R wave4 IMD
     needs: [filter_data_wave4]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave4_imd.rds
+        data: output/table_1/table_1_wave4_IMD.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave4_imd.html
-        csv: output/table_1/table_1_wave4_imd.csv
+        table: output/table_1/table_1_wave4_IMD.html
+        csv: output/table_1/table_1_wave4_IMD.csv
 
-  table_1_wave4_radio_chemo:
-    run: r:latest analysis/table_1.R wave4 radio_chemo
-    needs: [filter_data_wave4]
-    outputs:
-      highly_sensitive:
-        data: output/table_1/table_1_wave4_radio_chemo.rds
-      moderately_sensitive:
-        table: output/table_1/table_1_wave4_radio_chemo.html
-        csv: output/table_1/table_1_wave4_radio_chemo.csv
+
 
   # Table - incidence rates
-  table_ir_wave4_transplant:
-    run: r:latest analysis/table_ir.R wave4 transplant
+  table_ir_wave4_Tx:
+    run: r:latest analysis/table_ir.R wave4 Tx
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_transplant.csv
+        csv: output/table_ir/table_ir_wave4_Tx.csv
 
-  table_ir_wave4_haem_cancer:
-    run: r:latest analysis/table_ir.R wave4 haem_cancer
+  table_ir_wave4_HC:
+    run: r:latest analysis/table_ir.R wave4 HC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_haem_cancer.csv
+        csv: output/table_ir/table_ir_wave4_HC.csv
 
-  table_ir_wave4_imm:
-    run: r:latest analysis/table_ir.R wave4 imm
+  table_ir_wave4_RC:
+    run: r:latest analysis/table_ir.R wave4 RC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_imm.csv
+        csv: output/table_ir/table_ir_wave4_RC.csv
+        
+  table_ir_wave4_IMM:
+    run: r:latest analysis/table_ir.R wave4 IMM
+    needs: [filter_data_wave4]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir/table_ir_wave4_IMM.csv
 
-  table_ir_wave4_imd:
-    run: r:latest analysis/table_ir.R wave4 imd
+  table_ir_wave4_IMD:
+    run: r:latest analysis/table_ir.R wave4 IMD
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_imd.csv
+        csv: output/table_ir/table_ir_wave4_IMD.csv
 
-  table_ir_wave4_radio_chemo:
-    run: r:latest analysis/table_ir.R wave4 radio_chemo
-    needs: [filter_data_wave4]
-    outputs:
-      moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_radio_chemo.csv
+

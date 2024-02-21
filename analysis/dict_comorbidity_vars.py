@@ -273,14 +273,8 @@ comorbidity_variables = dict(
     ),
     
     # Kidney transplant
-    kidney_transplant=patients.with_these_clinical_events(
-        codelists.kidney_transplant_codes,
-        returning="binary_flag",
-        on_or_before="index_date",
-        find_last_match_in_period=True,
-        include_date_of_match=True,  # generates kidney_transplant_date
-        date_format="YYYY-MM-DD",
-    ),
+    # Defined in immunosuppression variables
+    
     # Categorise dialysis or kidney transplant
     # ref for logic:
     # https://docs.google.com/document/d/1hi_lMyuAa23u1xXLULLMdAiymiPopPZrAtQCDzYtjtE/edit

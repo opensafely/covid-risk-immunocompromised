@@ -94,14 +94,6 @@ process_data <- function(data_extracted) {
       
       care_home = ifelse(care_home_tpp==1 | care_home_code==1, 1, 0), 
       
-      bmi = fct_case_when(
-        bmi == "Not obese" ~ "Not obese",
-        bmi == "Obese I (30-34.9)" ~ "Obese I (30-34.9 kg/m2)",
-        bmi == "Obese II (35-39.9)" ~ "Obese II (35-39.9 kg/m2)",
-        bmi == "Obese III (40+)" ~ "Obese III (40+ kg/m2)",
-        TRUE ~ NA_character_
-      ),
-      
       smoking_status_comb = fct_case_when(
         smoking_status_comb == "N + M" ~ "Never and unknown",
         smoking_status_comb == "E" ~ "Former",
@@ -132,6 +124,14 @@ process_data <- function(data_extracted) {
       ),
       
       # comorbidities
+      bmi = fct_case_when(
+        bmi == "Not obese" ~ "Not obese",
+        bmi == "Obese I (30-34.9)" ~ "Obese I (30-34.9 kg/m2)",
+        bmi == "Obese II (35-39.9)" ~ "Obese II (35-39.9 kg/m2)",
+        bmi == "Obese III (40+)" ~ "Obese III (40+ kg/m2)",
+        TRUE ~ NA_character_
+      ),
+      
       asthma = fct_case_when(
         asthma == "0" ~ "No asthma",
         asthma == "1" ~ "With no oral steroid use",
@@ -176,26 +176,27 @@ process_data <- function(data_extracted) {
       
       
       # Define time since immunosuppression records
+      any_transplant = as.numeric(!is.na(bone_marrow_transplant_date) | !is.na(kidney_transplant_date) | !is.na(other_organ_transplant_date)),
+      any_transplant_date = pmax(bone_marrow_transplant_date, kidney_transplant_date, other_organ_transplant_date, na.rm=TRUE),
+      
+      time_since_transplant = as.numeric(index_date - any_transplant_date),
       time_since_haem_cancer = as.numeric(index_date - haem_cancer_date),
       time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
       time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
       time_since_radio_chemo = as.numeric(index_date - radio_chemo_date),
       
       # Define immunosuppression categories
-      any_transplant = as.numeric(!is.na(organ_transplant_date) | !is.na(bone_marrow_transplant_date)),
-      any_transplant_date = pmax(organ_transplant_date, bone_marrow_transplant_date, na.rm=TRUE),
-      
-      any_transplant_cat = fct_case_when(
-        is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date) ~ "Absent",
-        is.na(organ_transplant_date) & !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
-        !is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date)  ~ "Solid organ",
-        !is.na(organ_transplant_date) & !is.na(bone_marrow_transplant_date)  ~ "Bone marrow & solid organ",
+      any_transplant_type = fct_case_when(
+        is.na(bone_marrow_transplant_date) & is.na(kidney_transplant_date) & is.na(other_organ_transplant_date) ~ "Absent",
+        !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
+        is.na(bone_marrow_transplant_date) & !is.na(kidney_transplant_date)  ~ "Kidney transplant",
+        is.na(bone_marrow_transplant_date) & is.na(kidney_transplant_date) & !is.na(other_organ_transplant_date) ~ "Other transplant",
         TRUE ~ NA_character_
       ),
-      any_transplant_cat_broad = fct_case_when(
-        is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date) ~ "Absent",
-        !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
-        !is.na(organ_transplant_date) & is.na(bone_marrow_transplant_date)  ~ "Solid organ",
+      any_transplant_cat = fct_case_when(
+        is.na(time_since_transplant) ~ "Absent",
+        time_since_transplant>365 ~ ">1 year",
+        time_since_transplant>=0 & time_since_transplant<=365 ~ "<=1 year",
         TRUE ~ NA_character_
       ),
       haem_cancer_cat = fct_case_when(
@@ -220,6 +221,16 @@ process_data <- function(data_extracted) {
         is.na(time_since_radio_chemo) ~ "Absent",
         time_since_radio_chemo>182 ~ ">6 months",
         time_since_radio_chemo>=0 & time_since_radio_chemo<=182 ~ "<=6 months",
+        TRUE ~ NA_character_
+      ),
+      
+      # Define mutually exclusive immunosuppression subgroups
+      imm_subgroup = fct_case_when(
+        any_transplant==1 ~ "Tx",
+        any_transplant==0 & haem_cancer==1 ~ "HC",
+        any_transplant==0 & haem_cancer==0 & radio_chemo==1 ~ "RC",
+        any_transplant==0 & haem_cancer==0 & radio_chemo==0 & immunosuppression_medication==1 ~ "IMM",
+        any_transplant==0 & haem_cancer==0 & radio_chemo==0 & immunosuppression_medication==0 & immunosuppression_diagnosis==1 ~ "IMD",
         TRUE ~ NA_character_
       ),
       

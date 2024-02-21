@@ -62,7 +62,7 @@ study = StudyDefinition(
         AND
         (sex = "M" OR sex = "F")
         AND
-        (organ_transplant OR bone_marrow_transplant OR haem_cancer OR immunosuppression_diagnosis OR immunosuppression_medication OR radio_chemo)
+        (bone_marrow_transplant OR kidney_transplant OR other_organ_transplant OR haem_cancer OR immunosuppression_diagnosis OR immunosuppression_medication OR radio_chemo)
         AND
         index_of_multiple_deprivation != -1
         """,
@@ -79,19 +79,6 @@ study = StudyDefinition(
     **demographic_variables,
     
     # IMMUNOSUPPRESSION
-    # Solid organ transplant
-    organ_transplant=patients.with_these_clinical_events(
-        combine_codelists(
-            codelists.other_organ_transplant_codes,
-            codelists.kidney_transplant_codes
-         ),  # imported from codelists.py
-        returning="binary_flag",
-        on_or_before="index_date",
-        find_last_match_in_period=True,
-        include_date_of_match=True, # variable: organ_transplant_date
-        date_format="YYYY-MM-DD",
-    ),
-    
     # Bone marrow transplant
     bone_marrow_transplant=patients.with_these_clinical_events(
         codelists.bone_marrow_transplant_codes,  # imported from codelists.py
@@ -99,6 +86,26 @@ study = StudyDefinition(
         on_or_before="index_date",
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: bone_marrow_transplant_date
+        date_format="YYYY-MM-DD",
+    ),
+    
+    # Kidney transplant
+    kidney_transplant=patients.with_these_clinical_events(
+        codelists.kidney_transplant_codes,  # imported from codelists.py
+        returning="binary_flag",
+        on_or_before="index_date",
+        find_last_match_in_period=True,
+        include_date_of_match=True, # variable: kidney_transplant_date
+        date_format="YYYY-MM-DD",
+    ),
+
+    # Other solid organ transplant
+    other_organ_transplant=patients.with_these_clinical_events(
+        codelists.other_organ_transplant_codes,  # imported from codelists.py
+        returning="binary_flag",
+        on_or_before="index_date",
+        find_last_match_in_period=True,
+        include_date_of_match=True, # variable: other_organ_transplant_date
         date_format="YYYY-MM-DD",
     ),
   

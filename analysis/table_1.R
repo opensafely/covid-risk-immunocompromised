@@ -38,16 +38,8 @@ redaction_threshold = 10
 ## Select subset
 if (subgroup=="all") {
   data_filtered = data_filtered
-} else if (subgroup=="transplant") {
-  data_filtered = subset(data_filtered, organ_transplant==1 | bone_marrow_transplant==1)
-} else if (subgroup=="haem_cancer") {
-  data_filtered = subset(data_filtered, haem_cancer==1)
-} else if (subgroup=="imd") {
-  data_filtered = subset(data_filtered, immunosuppression_diagnosis==1)
-} else if (subgroup=="imm") {
-  data_filtered = subset(data_filtered, immunosuppression_medication==1)
-} else if (subgroup=="radio_chemo") {
-  data_filtered = subset(data_filtered, radio_chemo==1)
+} else if (subgroup!="all") {
+  data_filtered = subset(data_filtered, imm_subgroup==subgroup)
 } else {
   stop ("Arguments not specified correctly.")
 }
@@ -71,18 +63,20 @@ counts <- data_filtered %>%
          care_home,
 
          # Immunosuppression
-         any_transplant_cat_broad,
+         imm_subgroup,
+         any_transplant_type,
+         any_transplant_cat,
          haem_cancer_cat,
-         immunosuppression_diagnosis_cat,
-         immunosuppression_medication_cat,
          radio_chemo_cat,
+         immunosuppression_medication_cat,
+         immunosuppression_diagnosis_cat,
          
          # Immunosuppression (binary)
          any_transplant,
          haem_cancer,
-         immunosuppression_diagnosis,
-         immunosuppression_medication,
          radio_chemo,
+         immunosuppression_medication,
+         immunosuppression_diagnosis,
          
          # Vaccination
          n_doses_wave,
@@ -115,23 +109,25 @@ counts <- data_filtered %>%
 
 # Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
 if (subgroup=="all") {
-  counts = counts %>% select(-c(any_transplant, haem_cancer, immunosuppression_diagnosis, immunosuppression_medication, radio_chemo))
+  counts = counts %>% select(-c(any_transplant, haem_cancer, radio_chemo, immunosuppression_medication, immunosuppression_diagnosis))
 }
-if (subgroup=="transplant") {
-  counts = counts %>% select(-c(haem_cancer_cat, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo_cat, any_transplant))
+if (subgroup=="Tx") {
+  counts = counts %>% select(-c(imm_subgroup, haem_cancer_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, any_transplant))
 }
-if (subgroup=="haem_cancer") {
-  counts = counts %>% select(-c(any_transplant_cat_broad, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo_cat, haem_cancer))
+if (subgroup=="HC") {
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, haem_cancer))
 }
-if (subgroup=="imd") {
-  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_medication_cat, radio_chemo_cat, immunosuppression_diagnosis))
-}
-if (subgroup=="imm") {
-  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_diagnosis_cat, radio_chemo_cat, immunosuppression_medication))
-}
-if (subgroup=="radio_chemo") {
-  counts = counts %>% select(-c(any_transplant_cat_broad, haem_cancer_cat, immunosuppression_diagnosis_cat, immunosuppression_medication_cat, radio_chemo))
+if (subgroup=="RC") {
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, radio_chemo))
 } 
+if (subgroup=="IMM") {
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, radio_chemo_cat, immunosuppression_diagnosis_cat, immunosuppression_medication))
+}
+if (subgroup=="IMD") {
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis))
+}
+
+
 
 ## Create table 1
 counts_summary = counts %>% tbl_summary()

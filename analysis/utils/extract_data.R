@@ -51,7 +51,8 @@ extract_data <- function(file_name) {
         region = col_character(),
         
         # immunosuppression (binary)
-        organ_transplant = col_logical(),
+        kidney_transplant = col_logical(),
+        other_organ_transplant = col_logical(),
         bone_marrow_transplant = col_logical(),
         haem_cancer = col_logical(),
         immunosuppression_diagnosis = col_logical(),
@@ -60,7 +61,8 @@ extract_data <- function(file_name) {
         radio_chemo = col_logical(),
         
         # immunosuppression (dates)
-        organ_transplant_date = col_date(format = "%Y-%m-%d"),
+        kidney_transplant_date = col_date(format = "%Y-%m-%d"),
+        other_organ_transplant_date = col_date(format = "%Y-%m-%d"),
         bone_marrow_transplant_date = col_date(format = "%Y-%m-%d"),
         haem_cancer_date = col_date(format = "%Y-%m-%d"),
         immunosuppression_diagnosis_date = col_date(format = "%Y-%m-%d"),

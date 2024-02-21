@@ -21,7 +21,7 @@ source(paste0(utils_dir, "/calc_ir.R")) # functions to define vaccine groups
 args <- commandArgs(trailingOnly=TRUE)
 if(length(args)==0){
   wave <- "wave4"
-  subgroup <- "transplant"
+  subgroup <- "Tx"
 } else {
   wave <- args[[1]]
   subgroup <- args[[2]]
@@ -39,28 +39,16 @@ data_filtered <- read_rds(here::here("output", "filtered", paste0("input_",wave,
   ) 
 
 ## Select subset
-if (subgroup=="transplant") {
-  data_filtered = subset(data_filtered, organ_transplant==1 | bone_marrow_transplant==1)
-} else if (subgroup=="haem_cancer") {
-  data_filtered = subset(data_filtered, haem_cancer==1)
-} else if (subgroup=="imd") {
-  data_filtered = subset(data_filtered, immunosuppression_diagnosis==1)
-} else if (subgroup=="imm") {
-  data_filtered = subset(data_filtered, immunosuppression_medication==1)
-} else if (subgroup=="radio_chemo") {
-  data_filtered = subset(data_filtered, radio_chemo==1)
-} else {
-  stop ("Arguments not specified correctly.")
-}
+data_filtered = subset(data_filtered, imm_subgroup==subgroup)
 
 # create list of covariates
 subgroups_vctr <- c("N",
         # Demographics
          "agegroup", "sex", "ethnicity", "region", "imd", "care_home",
          # Immunosuppression (full)
-         "any_transplant_cat_broad", "haem_cancer_cat", "immunosuppression_diagnosis_cat", "immunosuppression_medication_cat", "radio_chemo_cat",
+         "any_transplant_type", "any_transplant_cat", "haem_cancer_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
          # Immunosuppression (binary)
-         "any_transplant", "haem_cancer", "immunosuppression_diagnosis", "immunosuppression_medication", "radio_chemo",
+         "any_transplant", "haem_cancer", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis", 
          # Vaccination
          "n_doses_wave", "pre_wave_vaccine_group",
          # Prior infection group
@@ -74,21 +62,28 @@ subgroups_vctr <- c("N",
   )
 
 # Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
-if (subgroup=="transplant") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("haem_cancer_cat", "immunosuppression_diagnosis_cat", "immunosuppression_medication_cat", "radio_chemo_cat", "any_transplant")]
+if (subgroup=="Tx") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("haem_cancer_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                                                         "any_transplant")]
 }
-if (subgroup=="haem_cancer") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_cat_broad", "immunosuppression_diagnosis_cat", "immunosuppression_medication_cat", "radio_chemo_cat", "haem_cancer")]
+if (subgroup=="HC") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                                                         "any_transplant", "haem_cancer")]
 }
-if (subgroup=="imd") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_cat_broad", "haem_cancer_cat", "immunosuppression_medication_cat", "radio_chemo_cat", "immunosuppression_diagnosis")]
-}
-if (subgroup=="imm") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_cat_broad", "haem_cancer_cat", "immunosuppression_diagnosis_cat", "radio_chemo_cat", "immunosuppression_medication")]
-}
-if (subgroup=="radio_chemo") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_cat_broad", "haem_cancer_cat", "immunosuppression_diagnosis_cat", "immunosuppression_medication_cat", "radio_chemo")]
+if (subgroup=="RC") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "haem_cancer_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat",  
+                                                         "any_transplant", "haem_cancer", "radio_chemo")]
 } 
+if (subgroup=="IMM") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "haem_cancer_cat", "radio_chemo_cat", "immunosuppression_diagnosis_cat",  
+                                                         "any_transplant", "haem_cancer", "radio_chemo", "immunosuppression_medication")]
+}
+if (subgroup=="IMD") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "haem_cancer_cat", "radio_chemo_cat", "immunosuppression_medication_cat", 
+                                                         "any_transplant", "haem_cancer", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")]
+}
+
+
 
 # Use loop to calculate incidence rates in each subgroup
 outcomes = c("severe", "death", "severe_sens", "death_sens")

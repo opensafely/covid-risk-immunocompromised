@@ -16,14 +16,16 @@
         "care_home"
     ],
     "immunosuppression_vars" : [
-        "organ_transplant",
-        "organ_transplant_date",
+        "kidney_transplant",
+        "kidney_transplant_date",
+        "other_organ_transplant",
+        "other_organ_transplant_date",
         "bone_marrow_transplant",
         "bone_marrow_transplant_date",
         "any_transplant",
         "any_transplant_date",
+        "any_transplant_type",
         "any_transplant_cat",
-        "any_transplant_cat_broad",
         "haem_cancer",
         "haem_cancer_date",
         "haem_cancer_cat",
@@ -37,7 +39,8 @@
         "immunosuppression_admin_date",
         "radio_chemo",
         "radio_chemo_date",
-        "radio_chemo_cat"
+        "radio_chemo_cat",
+        "imm_subgroup"
     ],
     "comorbidity_vars" : [
         "bmi",

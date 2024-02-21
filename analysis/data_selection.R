@@ -37,8 +37,8 @@ data_criteria <- data_processed %>%
     has_sex = !is.na(sex),
     
     # At least 1 ICP flag
-    is_ICP = organ_transplant==1 | bone_marrow_transplant==1 | haem_cancer==1 |
-      immunosuppression_diagnosis==1 | immunosuppression_medication==1 | radio_chemo==1,
+    is_ICP = bone_marrow_transplant==1 | kidney_transplant==1 | other_organ_transplant==1 | 
+      haem_cancer==1 | immunosuppression_diagnosis==1 | immunosuppression_medication==1 | radio_chemo==1,
     
     # Demography
     has_imd = !is.na(imd),
