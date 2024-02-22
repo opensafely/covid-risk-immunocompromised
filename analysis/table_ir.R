@@ -104,6 +104,23 @@ for (o in 1:length(outcomes)) {
         time = plyr::round_any(sum(as.numeric(get(fup_groups[o]))),5),
         calc_ir(events, time),
       )
+    
+    # Apply redactions
+    for (i in 1:nrow(ir_crude)) {
+      if (as.numeric(ir_crude$events[i])>0 & as.numeric(ir_crude$events[i])<=redaction_threshold) { ir_crude[i,c("events", "time", "ir", "ir_lower_ci", "ir_upper_ci")] = NA }
+      if (as.numeric(ir_crude$n[i])>0 & as.numeric(ir_crude$n[i])<=redaction_threshold) { ir_crude[i,c("n", "events", "time", "ir", "ir_lower_ci", "ir_upper_ci")] = NA }
+    }
+    
+    # If only 2 groups and one redacted, redact and flag as ineligible for models
+    ir_crude$eligible = "yes"
+    ngroup = nrow(ir_crude)
+    
+    if( any(is.na(ir_crude$events)) & (ngroup==2)) {
+      ir_crude[,c("events", "time", "ir", "ir_lower_ci", "ir_upper_ci")] = NA
+      ir_crude$eligible = "no"
+    }
+    if (ngroup==1) {  ir_crude$eligible = "no" }
+    
     ir_crude$variable = subgroups_vctr[s]
     ir_crude$outcome = outcomes[o]
     if(s==1 & o==1) { ir_collated = ir_crude } else { ir_collated = rbind(ir_collated, ir_crude) }
@@ -113,11 +130,6 @@ for (o in 1:length(outcomes)) {
 # Reorder columns
 ir_collated = ir_collated %>% relocate(variable,outcome)
 
-# Apply redactions
-for (i in 1:nrow(ir_collated)) {
-  if (as.numeric(ir_collated$events[i])>0 & as.numeric(ir_collated$events[i])<=redaction_threshold) { ir_collated[i,c("events", "time", "ir", "ir_lower_ci", "ir_upper_ci")] = NA }
-  if (as.numeric(ir_collated$n[i])>0 & as.numeric(ir_collated$n[i])<=redaction_threshold) { ir_collated[i,c("n", "events", "time", "ir", "ir_lower_ci", "ir_upper_ci")] = NA }
-}
 
 # Save output
 output_dir <- here("output", "table_ir")

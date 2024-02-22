@@ -28,7 +28,6 @@
         "bone_marrow_transplant_date",
         "haem_cancer",
         "haem_cancer_date",
-        "haem_cancer_cat",
         "any_bone_marrow",
         "any_bone_marrow_date",
         "any_bone_marrow_type",
@@ -101,10 +100,7 @@
         "fup_death",
         "ind_death",
         "tte_stop_severe_sens",
-        "tte_stop_death_sens",
         "fup_severe_sens",
-        "ind_severe_sens",
-        "fup_death_sens",
-        "ind_death_sens"
+        "ind_severe_sens"
     ]
 }

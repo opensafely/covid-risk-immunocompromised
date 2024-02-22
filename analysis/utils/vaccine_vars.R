@@ -44,7 +44,7 @@ add_n_doses <- function(data){
         n_doses_omicron == "0" ~ "0",
         n_doses_omicron == "1" ~ "1",
         n_doses_omicron == "2" ~ "2",
-        n_doses_omicron == "3" ~ "3+",
+        n_doses_omicron == "3" ~ "3+"
       ),
     )
 }

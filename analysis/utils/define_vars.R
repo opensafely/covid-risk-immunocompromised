@@ -262,12 +262,12 @@ process_data <- function(data_extracted) {
       pre_delta_infection_group = fct_case_when(
         wt_covid_cat == 0 & alpha_covid_cat == 0 ~ "No prior infection",
         wt_covid_cat == 1 & alpha_covid_cat == 0 ~ "Infected (WT)",
-        alpha_covid_cat == 1 ~ "Infected (Alpha)",
+        alpha_covid_cat == 1 ~ "Infected (Alpha)"
       ),
       pre_omicron_infection_group = fct_case_when(
         wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 ~ "No prior infection",
         (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 0 ~ "Infected (Pre Delta)",
-        delta_covid_cat == 1 ~ "Infected (Delta)",
+        delta_covid_cat == 1 ~ "Infected (Delta)"
       ),
       
       # Calculate earliest severe outcome

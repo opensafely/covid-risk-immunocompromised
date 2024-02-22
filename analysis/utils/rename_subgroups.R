@@ -44,14 +44,15 @@ rename_subgroups <- function(table){
         subgroup == "imm_subgroup" ~ "Immunosuppression subgroup",
         subgroup == "any_transplant_type" ~ "Organ transplant (type)",
         subgroup == "any_transplant_cat" ~ "Organ transplant (timing)",
-        subgroup == "bone_marrow_cat" ~ "Haematological malignancy or bone marrow transplant",
+        subgroup == "any_bone_marrow_type" ~ "HC or Tx (BM) (type)",
+        subgroup == "any_bone_marrow_cat" ~ "HC or Tx (BM) (timing)",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
         subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
         
         # Immunosuppression (binary)
         subgroup == "any_transplant" ~ "Organ transplant",
-        subgroup == "any_bone_marrow" ~ "Haematological malignancy or bone marrow transplant",
+        subgroup == "any_bone_marrow" ~ "HC or Tx (BM)",
         subgroup == "radio_chemo" ~ "Radiotherapy/Chemotherapy",
         subgroup == "immunosuppression_medication" ~ "Immunosuppression (medication)",
         subgroup == "immunosuppression_diagnosis" ~ "Immunosuppression (diagnosis)",
