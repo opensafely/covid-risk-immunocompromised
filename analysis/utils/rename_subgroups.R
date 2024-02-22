@@ -38,19 +38,20 @@ rename_subgroups <- function(table){
         subgroup == "n_doses_wave" ~ "N prior doses",
         subgroup == "pre_wave_vaccine_group" ~ "Timing of last dose",
         subgroup == "pre_wave_infection_group" ~ "Prior infection status",
+        subgroup == "pre_wave_vax_infection_comb" ~ "Vaccination/infection status",
         
         # Immunosuppression
         subgroup == "imm_subgroup" ~ "Immunosuppression subgroup",
         subgroup == "any_transplant_type" ~ "Organ transplant (type)",
         subgroup == "any_transplant_cat" ~ "Organ transplant (timing)",
-        subgroup == "haem_cancer_cat" ~ "Haematological malignancy",
+        subgroup == "bone_marrow_cat" ~ "Haematological malignancy or bone marrow transplant",
         subgroup == "radio_chemo_cat" ~ "Radiotherapy/Chemotherapy",
         subgroup == "immunosuppression_medication_cat" ~ "Immunosuppression (medication)",
         subgroup == "immunosuppression_diagnosis_cat" ~ "Immunosuppression (diagnosis)",
         
         # Immunosuppression (binary)
         subgroup == "any_transplant" ~ "Organ transplant",
-        subgroup == "haem_cancer" ~ "Haematological malignancy",
+        subgroup == "any_bone_marrow" ~ "Haematological malignancy or bone marrow transplant",
         subgroup == "radio_chemo" ~ "Radiotherapy/Chemotherapy",
         subgroup == "immunosuppression_medication" ~ "Immunosuppression (medication)",
         subgroup == "immunosuppression_diagnosis" ~ "Immunosuppression (diagnosis)",

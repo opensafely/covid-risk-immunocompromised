@@ -84,7 +84,8 @@ if (wave=="wave1") {
       pre_wave_vaccine_group = "Unvaccinated",
       pre_wave_last_vax_date = NA,
       pre_wave_vax_diff = NA,
-      next_vax_date = NA
+      next_vax_date = NA,
+      pre_wave_vax_infection_comb = NA
     )
 }
 if (wave=="wave2") {
@@ -100,7 +101,8 @@ if (wave=="wave2") {
       pre_wave_vaccine_group = "Unvaccinated",
       pre_wave_last_vax_date = NA,
       pre_wave_vax_diff = NA,
-      next_vax_date = post_alpha_first_vax_date
+      next_vax_date = post_alpha_first_vax_date,
+      pre_wave_vax_infection_comb = NA
     )
 }
 if (wave=="wave3") {
@@ -116,7 +118,16 @@ if (wave=="wave3") {
       pre_wave_vaccine_group = pre_delta_vaccine_group,
       pre_wave_last_vax_date = pre_delta_last_vax_date,
       pre_wave_vax_diff = pre_delta_vax_diff,
-      next_vax_date = post_delta_first_vax_date
+      next_vax_date = post_delta_first_vax_date,
+      pre_wave_vax_infection_comb = fct_case_when(
+        pre_wave_vaccine_group=="Unvaccinated" & pre_wave_infection_group=="No prior infection" ~ "Unvaccinated, uninfected",
+        pre_wave_vaccine_group=="Unvaccinated" & pre_wave_infection_group!="No prior infection" ~ "Unvaccinated, infected",
+        pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group=="No prior infection" ~ "27+ weeks, uninfected",
+        pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group!="No prior infection" ~ "27+ weeks, infected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-27 weeks, uninfected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-27 weeks, infected",
+        TRUE ~ NA_character_
+      )
     )
 }
 if (wave=="wave4") {
@@ -132,7 +143,16 @@ if (wave=="wave4") {
       pre_wave_vaccine_group = pre_omicron_vaccine_group,
       pre_wave_last_vax_date = pre_omicron_last_vax_date,
       pre_wave_vax_diff = pre_omicron_vax_diff,
-      next_vax_date = post_omicron_first_vax_date
+      next_vax_date = post_omicron_first_vax_date,
+      pre_wave_vax_infection_comb = fct_case_when(
+        pre_wave_vaccine_group=="Unvaccinated" & pre_wave_infection_group=="No prior infection" ~ "Unvaccinated, uninfected",
+        pre_wave_vaccine_group=="Unvaccinated" & pre_wave_infection_group!="No prior infection" ~ "Unvaccinated, infected",
+        pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group=="No prior infection" ~ "27+ weeks, uninfected",
+        pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group!="No prior infection" ~ "27+ weeks, infected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-27 weeks, uninfected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-27 weeks, infected",
+        TRUE ~ NA_character_
+      )
     )
 }
 
@@ -151,13 +171,10 @@ data_processed = data_processed %>%
     
     # calculate tte
     tte_stop_severe_sens = pmin(tte_stop_severe_date, next_vax_date, na.rm=TRUE),
-    tte_stop_death_sens = pmin(tte_stop_death_date, next_vax_date, na.rm=TRUE),
-    
+
     # follow-up time and ind values for primary analysis
     fup_severe_sens = as.numeric(tte_stop_severe_sens - wave_start_date),
     ind_severe_sens = if_else((covid_severe_date>tte_stop_severe_sens) | is.na(covid_severe_date), FALSE, TRUE),
-    fup_death_sens = as.numeric(tte_stop_death_sens - wave_start_date),
-    ind_death_sens = if_else((covid_death_date>tte_stop_death_sens) | is.na(covid_death_date), FALSE, TRUE)
   )
 
 

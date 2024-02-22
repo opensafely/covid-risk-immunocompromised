@@ -12,7 +12,7 @@
 ## data: extracted data
 ## Outputs:
 ## n_doses_delta - number of doses pre delta era (0, 1, 2, 3+)
-## n_doses_omicron - number of doses pre omicron era  (0, 1, 2, 3, 4+)
+## n_doses_omicron - number of doses pre omicron era  (0, 1, 2, 3+)
 add_n_doses <- function(data){
   data <- 
     data %>%
@@ -34,8 +34,7 @@ add_n_doses <- function(data){
       
       # dose counts at start of omicron era
       n_doses_omicron = fct_case_when(
-        covid_vax_date_4<=omicron_start_date ~ "4+",
-        covid_vax_date_3<=omicron_start_date ~ "3",
+        covid_vax_date_3<=omicron_start_date ~ "3+",
         covid_vax_date_2<=omicron_start_date ~ "2",
         covid_vax_date_1<=omicron_start_date ~ "1",
         TRUE ~ "0"
@@ -45,8 +44,7 @@ add_n_doses <- function(data){
         n_doses_omicron == "0" ~ "0",
         n_doses_omicron == "1" ~ "1",
         n_doses_omicron == "2" ~ "2",
-        n_doses_omicron == "3" ~ "3",
-        n_doses_omicron == "4+" ~ "4+"
+        n_doses_omicron == "3" ~ "3+",
       ),
     )
 }

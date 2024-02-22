@@ -176,21 +176,22 @@ process_data <- function(data_extracted) {
       
       
       # Define time since immunosuppression records
-      any_transplant = as.numeric(!is.na(bone_marrow_transplant_date) | !is.na(kidney_transplant_date) | !is.na(other_organ_transplant_date)),
-      any_transplant_date = pmax(bone_marrow_transplant_date, kidney_transplant_date, other_organ_transplant_date, na.rm=TRUE),
+      any_transplant = as.numeric(!is.na(kidney_transplant_date) | !is.na(other_organ_transplant_date)),
+      any_transplant_date = pmax(kidney_transplant_date, other_organ_transplant_date, na.rm=TRUE),
+      any_bone_marrow = as.numeric(!is.na(bone_marrow_transplant_date) | !is.na(haem_cancer_date)),
+      any_bone_marrow_date = pmax(bone_marrow_transplant_date, haem_cancer_date, na.rm=TRUE),
       
       time_since_transplant = as.numeric(index_date - any_transplant_date),
-      time_since_haem_cancer = as.numeric(index_date - haem_cancer_date),
-      time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
-      time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
+      time_since_bone_marrow = as.numeric(index_date - any_bone_marrow_date),
       time_since_radio_chemo = as.numeric(index_date - radio_chemo_date),
+      time_since_immunosuppression_medication = as.numeric(index_date - immunosuppression_medication_date),
+      time_since_immunosuppression_diagnosis = as.numeric(index_date - immunosuppression_diagnosis_date),
       
       # Define immunosuppression categories
       any_transplant_type = fct_case_when(
-        is.na(bone_marrow_transplant_date) & is.na(kidney_transplant_date) & is.na(other_organ_transplant_date) ~ "Absent",
-        !is.na(bone_marrow_transplant_date)  ~ "Bone marrow",
-        is.na(bone_marrow_transplant_date) & !is.na(kidney_transplant_date)  ~ "Kidney transplant",
-        is.na(bone_marrow_transplant_date) & is.na(kidney_transplant_date) & !is.na(other_organ_transplant_date) ~ "Other transplant",
+        is.na(kidney_transplant_date) & is.na(other_organ_transplant_date) ~ "Absent",
+        !is.na(kidney_transplant_date)  ~ "Kidney transplant",
+        is.na(kidney_transplant_date) & !is.na(other_organ_transplant_date) ~ "Other transplant",
         TRUE ~ NA_character_
       ),
       any_transplant_cat = fct_case_when(
@@ -199,10 +200,16 @@ process_data <- function(data_extracted) {
         time_since_transplant>=0 & time_since_transplant<=365 ~ "<=1 year",
         TRUE ~ NA_character_
       ),
-      haem_cancer_cat = fct_case_when(
-        is.na(time_since_haem_cancer) ~ "Absent",
-        time_since_haem_cancer>365 ~ ">1 year",
-        time_since_haem_cancer>=0 & time_since_haem_cancer<=365 ~ "<=1 year",
+      any_bone_marrow_type = fct_case_when(
+        is.na(any_bone_marrow_date) & is.na(haem_cancer_date) ~ "Absent",
+        !is.na(any_bone_marrow_date)  ~ "Tx (BM)",
+        is.na(any_bone_marrow_date) & !is.na(haem_cancer_date) ~ "HC no Tx (BM)",
+        TRUE ~ NA_character_
+      ),
+      any_bone_marrow_cat = fct_case_when(
+        is.na(time_since_bone_marrow) ~ "Absent",
+        time_since_bone_marrow>365 ~ ">1 year",
+        time_since_bone_marrow>=0 & time_since_bone_marrow<=365 ~ "<=1 year",
         TRUE ~ NA_character_
       ),
       immunosuppression_diagnosis_cat = fct_case_when(
@@ -227,10 +234,10 @@ process_data <- function(data_extracted) {
       # Define mutually exclusive immunosuppression subgroups
       imm_subgroup = fct_case_when(
         any_transplant==1 ~ "Tx",
-        any_transplant==0 & haem_cancer==1 ~ "HC",
-        any_transplant==0 & haem_cancer==0 & radio_chemo==1 ~ "RC",
-        any_transplant==0 & haem_cancer==0 & radio_chemo==0 & immunosuppression_medication==1 ~ "IMM",
-        any_transplant==0 & haem_cancer==0 & radio_chemo==0 & immunosuppression_medication==0 & immunosuppression_diagnosis==1 ~ "IMD",
+        any_transplant==0 & any_bone_marrow==1 ~ "HC",
+        any_transplant==0 & any_bone_marrow==0 & radio_chemo==1 ~ "RC",
+        any_transplant==0 & any_bone_marrow==0 & radio_chemo==0 & immunosuppression_medication==1 ~ "IMM",
+        any_transplant==0 & any_bone_marrow==0 & radio_chemo==0 & immunosuppression_medication==0 & immunosuppression_diagnosis==1 ~ "IMD",
         TRUE ~ NA_character_
       ),
       
@@ -247,22 +254,20 @@ process_data <- function(data_extracted) {
       pre_delta_infection_days = as.numeric(delta_start_date - alpha_covid_max_date),
       pre_omicron_infection_days = as.numeric(omicron_start_date - delta_covid_max_date),
       
-      # Prior infection groups
+      # Prior infection groups (assign to most recent era)
       pre_alpha_infection_group = fct_case_when(
         wt_covid_cat == 0 ~ "No prior infection",
         wt_covid_cat == 1 ~ "Infected (WT)"
       ),
       pre_delta_infection_group = fct_case_when(
         wt_covid_cat == 0 & alpha_covid_cat == 0 ~ "No prior infection",
-        wt_covid_cat == 1 & alpha_covid_cat == 0 ~ "Infected (WT only)",
-        wt_covid_cat == 0 & alpha_covid_cat == 1 ~ "Infected (Alpha only)",
-        wt_covid_cat == 1 & alpha_covid_cat == 1 ~ "Infected (WT + Alpha)"
+        wt_covid_cat == 1 & alpha_covid_cat == 0 ~ "Infected (WT)",
+        alpha_covid_cat == 1 ~ "Infected (Alpha)",
       ),
       pre_omicron_infection_group = fct_case_when(
         wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 ~ "No prior infection",
-        (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 0 ~ "Infected (Pre Delta only)",
-        wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 1 ~ "Infected (Delta only)",
-        (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 1 ~ "Infected (Pre Delta + Delta)"
+        (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 0 ~ "Infected (Pre Delta)",
+        delta_covid_cat == 1 ~ "Infected (Delta)",
       ),
       
       # Calculate earliest severe outcome

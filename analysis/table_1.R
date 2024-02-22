@@ -66,14 +66,15 @@ counts <- data_filtered %>%
          imm_subgroup,
          any_transplant_type,
          any_transplant_cat,
-         haem_cancer_cat,
+         any_bone_marrow_type,
+         any_bone_marrow_cat,
          radio_chemo_cat,
          immunosuppression_medication_cat,
          immunosuppression_diagnosis_cat,
          
          # Immunosuppression (binary)
          any_transplant,
-         haem_cancer,
+         any_bone_marrow,
          radio_chemo,
          immunosuppression_medication,
          immunosuppression_diagnosis,
@@ -84,6 +85,9 @@ counts <- data_filtered %>%
          
          # Prior infection group
          pre_wave_infection_group,
+         
+         # Prior infection/vaccination
+         pre_wave_vax_infection_comb,
          
          # At risk morbidity count
          multimorb_cat,
@@ -109,22 +113,27 @@ counts <- data_filtered %>%
 
 # Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
 if (subgroup=="all") {
-  counts = counts %>% select(-c(any_transplant, haem_cancer, radio_chemo, immunosuppression_medication, immunosuppression_diagnosis))
+  counts = counts %>% select(-c(any_transplant, any_bone_marrow, radio_chemo, immunosuppression_medication, immunosuppression_diagnosis))
 }
 if (subgroup=="Tx") {
-  counts = counts %>% select(-c(imm_subgroup, haem_cancer_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, any_transplant))
+  counts = counts %>% select(-c(imm_subgroup, any_bone_marrow_type, any_bone_marrow_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
+                                any_transplant))
 }
 if (subgroup=="HC") {
-  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, haem_cancer))
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
+                                any_bone_marrow))
 }
 if (subgroup=="RC") {
-  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, radio_chemo))
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, any_bone_marrow_type, any_bone_marrow_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
+                                radio_chemo))
 } 
 if (subgroup=="IMM") {
-  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, radio_chemo_cat, immunosuppression_diagnosis_cat, immunosuppression_medication))
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, any_bone_marrow_type, any_bone_marrow_cat, radio_chemo_cat, immunosuppression_diagnosis_cat, 
+                                immunosuppression_medication))
 }
 if (subgroup=="IMD") {
-  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, haem_cancer_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis))
+  counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, any_bone_marrow_type, any_bone_marrow_cat, radio_chemo_cat, immunosuppression_medication_cat, 
+                                immunosuppression_diagnosis))
 }
 
 
