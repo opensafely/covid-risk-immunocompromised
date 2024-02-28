@@ -114,6 +114,13 @@ actions:
         table: output/table_1/table_1_wave4_IMD.html
         csv: output/table_1/table_1_wave4_IMD.csv
 
+  collate_table_1_wave4:
+    run: r:latest analysis/collate_table_1.R wave4
+    needs: [table_1_wave4_all, table_1_wave4_Tx, table_1_wave4_HC, table_1_wave4_RC, table_1_wave4_IMM, table_1_wave4_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_1/table_1_wave4_collated.csv
+
 
 
   # Table - incidence rates
@@ -122,32 +129,37 @@ actions:
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir_hr/table_ir_hr_wave4_Tx.csv
+        csv1: output/table_ir_hr/table_ir_hr_wave4_Tx.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave4_Tx_simple.csv
 
   calc_ir_hr_wave4_HC:
     run: r:latest analysis/calc_ir_hr.R wave4 HC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir_hr/table_ir_hr_wave4_HC.csv
+        csv1: output/table_ir_hr/table_ir_hr_wave4_HC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave4_HC_simple.csv
 
   calc_ir_hr_wave4_RC:
     run: r:latest analysis/calc_ir_hr.R wave4 RC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir_hr/table_ir_hr_wave4_RC.csv
-        
+        csv1: output/table_ir_hr/table_ir_hr_wave4_RC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave4_RC_simple.csv
+
   calc_ir_hr_wave4_IMM:
     run: r:latest analysis/calc_ir_hr.R wave4 IMM
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir_hr/table_ir_hr_wave4_IMM.csv
+        csv1: output/table_ir_hr/table_ir_hr_wave4_IMM.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave4_IMM_simple.csv
 
   calc_ir_hr_wave4_IMD:
     run: r:latest analysis/calc_ir_hr.R wave4 IMD
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir_hr/table_ir_hr_wave4_IMD.csv
+        csv1: output/table_ir_hr/table_ir_hr_wave4_IMD.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave4_IMD_simple.csv
