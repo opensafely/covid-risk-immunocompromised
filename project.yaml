@@ -117,39 +117,37 @@ actions:
 
 
   # Table - incidence rates
-  table_ir_wave4_Tx:
-    run: r:latest analysis/table_ir.R wave4 Tx
+  calc_ir_hr_wave4_Tx:
+    run: r:latest analysis/calc_ir_hr.R wave4 Tx
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_Tx.csv
+        csv: output/table_ir_hr/table_ir_hr_wave4_Tx.csv
 
-  table_ir_wave4_HC:
-    run: r:latest analysis/table_ir.R wave4 HC
+  calc_ir_hr_wave4_HC:
+    run: r:latest analysis/calc_ir_hr.R wave4 HC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_HC.csv
+        csv: output/table_ir_hr/table_ir_hr_wave4_HC.csv
 
-  table_ir_wave4_RC:
-    run: r:latest analysis/table_ir.R wave4 RC
+  calc_ir_hr_wave4_RC:
+    run: r:latest analysis/calc_ir_hr.R wave4 RC
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_RC.csv
+        csv: output/table_ir_hr/table_ir_hr_wave4_RC.csv
         
-  table_ir_wave4_IMM:
-    run: r:latest analysis/table_ir.R wave4 IMM
+  calc_ir_hr_wave4_IMM:
+    run: r:latest analysis/calc_ir_hr.R wave4 IMM
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_IMM.csv
+        csv: output/table_ir_hr/table_ir_hr_wave4_IMM.csv
 
-  table_ir_wave4_IMD:
-    run: r:latest analysis/table_ir.R wave4 IMD
+  calc_ir_hr_wave4_IMD:
+    run: r:latest analysis/calc_ir_hr.R wave4 IMD
     needs: [filter_data_wave4]
     outputs:
       moderately_sensitive:
-        csv: output/table_ir/table_ir_wave4_IMD.csv
-
-
+        csv: output/table_ir_hr/table_ir_hr_wave4_IMD.csv

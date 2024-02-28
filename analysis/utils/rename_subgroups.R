@@ -33,7 +33,8 @@ rename_subgroups <- function(table){
         subgroup == "region" ~ "Region",
         subgroup == "imd" ~ "IMD quintile",
         subgroup == "care_home" ~ "Care home",
-
+        subgroup == "smoking_status_comb" ~ "Smoking status",
+        
         # Vaccine/Infection
         subgroup == "n_doses_wave" ~ "N prior doses",
         subgroup == "pre_wave_vaccine_group" ~ "Timing of last dose",

@@ -61,6 +61,7 @@ counts <- data_filtered %>%
          region,
          imd,
          care_home,
+         smoking_status_comb,
 
          # Immunosuppression
          imm_subgroup,

@@ -201,9 +201,9 @@ process_data <- function(data_extracted) {
         TRUE ~ NA_character_
       ),
       any_bone_marrow_type = fct_case_when(
-        is.na(any_bone_marrow_date) & is.na(haem_cancer_date) ~ "Absent",
-        !is.na(any_bone_marrow_date)  ~ "Tx (BM)",
-        is.na(any_bone_marrow_date) & !is.na(haem_cancer_date) ~ "HC no Tx (BM)",
+        is.na(bone_marrow_transplant_date) & is.na(haem_cancer_date) ~ "Absent",
+        !is.na(bone_marrow_transplant_date)  ~ "Tx (BM)",
+        is.na(bone_marrow_transplant_date) & !is.na(haem_cancer_date) ~ "HC no Tx (BM)",
         TRUE ~ NA_character_
       ),
       any_bone_marrow_cat = fct_case_when(

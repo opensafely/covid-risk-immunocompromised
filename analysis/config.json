@@ -13,7 +13,8 @@
         "ethnicity",
         "region",
         "imd",
-        "care_home"
+        "care_home",
+        "smoking_status_comb"
     ],
     "immunosuppression_vars" : [
         "kidney_transplant",
