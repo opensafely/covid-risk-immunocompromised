@@ -130,7 +130,7 @@ for (o in 1:length(outcomes)) {
     # Determine eligibility for cox models
     ## At least two groups above redaction threshold
     ## Exclude region as stratification factor
-    if( group=="region" | (sum(ir_crude$events>=redaction_threshold) <= 2) ) { 
+    if( group=="region" | (sum(ir_crude$events>redaction_threshold) < 2) ) { 
       ir_crude$eligible = "no" 
       } else {
       ir_crude$eligible = "yes"
@@ -151,19 +151,19 @@ for (o in 1:length(outcomes)) {
       
       # Fit minimally adjusted models
       if (group == "agegroup") {
-        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ agegroup + sex + strata(region)")), 
+        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + strata(region)")), 
                             data = data_filtered)
       } else if (group == "sex") {
-        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + strata(region)")), 
+        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + strata(region)")), 
                             data = data_filtered)
       } else {
-        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ ",group," + rcs(age, 4) + sex + strata(region)")), 
+        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
                             data = data_filtered)
       }
       
       # Pick outputs for term of interest
       tidy = broom.helpers::tidy_plus_plus(cox_minimal, exponentiate = TRUE) 
-      tidy = subset(tidy, variable==group) %>% 
+      tidy = subset(tidy, variable==paste0("factor(",group,")")) %>% 
         rename(group = label) %>%
         mutate(
           group = as.character(group),
@@ -179,33 +179,33 @@ for (o in 1:length(outcomes)) {
       
       # Fit fully adjusted models
       if (group == "agegroup") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ agegroup + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
         
       } else if (group == "sex") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
         
       } else if (group == "pre_wave_vaccine_group" | group == "n_doses_wave") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
         
       } else if (group == "pre_wave_infection_group") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + strata(region)")), 
                          data = data_filtered)
         
       } else if (group == "pre_wave_vax_infection_comb") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ pre_wave_vax_infection_comb + rcs(age, 4) + sex + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + + rcs(age, 4) + sex + strata(region)")), 
                          data = data_filtered)
         
       } else {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ ",group," + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
       }
       
       # Pick out adjusted outputs for term of interest
       tidy = broom.helpers::tidy_plus_plus(cox_adj, exponentiate = TRUE) 
-      tidy = subset(tidy, variable==group) %>% 
+      tidy = subset(tidy, variable==paste0("factor(",group,")")) %>% 
         rename(group = label) %>%
         mutate(
           group = as.character(group),
@@ -225,6 +225,14 @@ for (o in 1:length(outcomes)) {
     for (i in 1:nrow(ir_crude)) {
       if (as.numeric(ir_crude$events[i])>0 & as.numeric(ir_crude$events[i])<=redaction_threshold) { ir_crude[i,redaction_columns] = NA }
       if (as.numeric(ir_crude$n[i])>0 & as.numeric(ir_crude$n[i])<=redaction_threshold) { ir_crude[i,c("n", redaction_columns)] = NA }
+    }
+    
+    # Secondary redactions
+    if( (sum(ir_crude$events>redaction_threshold, na.rm=T) < 2) ) { 
+      ir_crude[,redaction_columns] = NA 
+    }
+    if( (sum(ir_crude$n>redaction_threshold, na.rm=T) < 2) ) { 
+      ir_crude[,c("n",redaction_columns)] = NA 
     }
 
     ir_crude$variable = subgroups_vctr[s]
