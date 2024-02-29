@@ -262,6 +262,13 @@ for (o in 1:length(outcomes)) {
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                         data = data_filtered)
       
+      } else if (group %in% c("care_home", "smoking_status_comb",
+                              "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                              "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + + rcs(age, 4) + sex + 
+                                          ethnicity + imd + strata(region)")), 
+                        data = data_filtered)
+        
       } else {
         cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
@@ -320,21 +327,21 @@ write_csv(ir_collated, here::here("output", "table_ir_hr",  paste0("table_ir_hr_
 ir_simple = ir_collated %>%
   mutate(
     hr_min = round(estimate_min,2),
-    hr_lower_ci_min = round(conf.low_min,2),
-    hr_upper_ci_min = round(conf.high_min,2),
+    hr_lower_min = round(conf.low_min,2),
+    hr_upper_min = round(conf.high_min,2),
     hr_adj = round(estimate_adj,2),
-    hr_lower_ci_adj = round(conf.low_adj,2),
-    hr_upper_ci_adj = round(conf.high_adj,2),
+    hr_lower_adj = round(conf.low_adj,2),
+    hr_upper_adj = round(conf.high_adj,2),
     hr_full = round(estimate_full,2),
-    hr_lower_ci_full = round(conf.low_full,2),
-    hr_lower_ci_full = round(conf.high_full,2)
+    hr_lower_full = round(conf.low_full,2),
+    hr_upper_full = round(conf.high_full,2)
   ) %>%
   select(
     variable, outcome, group, n, events, time, 
     ir, ir_lower_ci, ir_upper_ci, 
-    hr_min, hr_lower_ci_min, hr_upper_ci_min,
-    hr_adj, hr_lower_ci_adj, hr_upper_ci_adj,
-    hr_full, hr_lower_ci_full, hr_lower_ci_full
+    hr_min, hr_lower_min, hr_upper_min,
+    hr_adj, hr_lower_adj, hr_upper_adj,
+    hr_full, hr_lower_full, hr_upper_full
   ) %>%
   filter(variable != "region")
 
