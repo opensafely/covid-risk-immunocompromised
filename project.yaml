@@ -5,6 +5,8 @@ expectations:
 
 actions:
 
+  ## WAVE 4 ##
+
   # Extract data
   generate_study_population_wave4:
     run: >
@@ -163,3 +165,156 @@ actions:
       moderately_sensitive:
         csv1: output/table_ir_hr/table_ir_hr_wave4_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wave4_IMD_simple.csv
+
+
+  ## WAVE 3 ##
+
+  # Extract data
+  generate_study_population_wave3:
+    run: >
+      cohortextractor:latest generate_cohort
+        --study-definition study_definition_wave3
+        --skip-existing
+        --output-format=csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/input_wave3.csv.gz
+
+  # Process data
+  process_data_wave3:
+    run: r:latest analysis/data_process.R wave3
+    needs: [generate_study_population_wave3]
+    outputs:
+      highly_sensitive:
+        rds: output/processed/input_wave3.rds
+        
+  # Skim data
+  skim_data_wave3:
+    run: r:latest analysis/data_skim.R output/processed/input_wave3.rds output/data_properties
+    needs: [process_data_wave3]
+    outputs:
+      moderately_sensitive:
+        txt1: output/data_properties/input_wave3_skim.txt
+        txt2: output/data_properties/input_wave3_coltypes.txt
+        txt3: output/data_properties/input_wave3_tabulate.txt
+        
+  # Filter data
+  filter_data_wave3:
+    run: r:latest analysis/data_selection.R wave3
+    needs: [process_data_wave3]
+    outputs:
+      highly_sensitive:
+        rds: output/filtered/input_wave3.rds
+      moderately_sensitive:
+        csv: output/flowchart/flowchart_wave3.csv
+
+  # Table 1
+  table_1_wave3_all:
+    run: r:latest analysis/table_1.R wave3 all
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_all.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_all.html
+        csv: output/table_1/table_1_wave3_all.csv
+        
+  table_1_wave3_Tx:
+    run: r:latest analysis/table_1.R wave3 Tx
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_Tx.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_Tx.html
+        csv: output/table_1/table_1_wave3_Tx.csv
+
+  table_1_wave3_HC:
+    run: r:latest analysis/table_1.R wave3 HC
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_HC.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_HC.html
+        csv: output/table_1/table_1_wave3_HC.csv
+
+  table_1_wave3_RC:
+    run: r:latest analysis/table_1.R wave3 RC
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_RC.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_RC.html
+        csv: output/table_1/table_1_wave3_RC.csv
+        
+  table_1_wave3_IMM:
+    run: r:latest analysis/table_1.R wave3 IMM
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_IMM.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_IMM.html
+        csv: output/table_1/table_1_wave3_IMM.csv
+
+  table_1_wave3_IMD:
+    run: r:latest analysis/table_1.R wave3 IMD
+    needs: [filter_data_wave3]
+    outputs:
+      highly_sensitive:
+        data: output/table_1/table_1_wave3_IMD.rds
+      moderately_sensitive:
+        table: output/table_1/table_1_wave3_IMD.html
+        csv: output/table_1/table_1_wave3_IMD.csv
+
+  collate_table_1_wave3:
+    run: r:latest analysis/collate_table_1.R wave3
+    needs: [table_1_wave3_all, table_1_wave3_Tx, table_1_wave3_HC, table_1_wave3_RC, table_1_wave3_IMM, table_1_wave3_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_1/table_1_wave3_collated.csv
+
+
+
+  # Table - incidence rates
+  calc_ir_hr_wave3_Tx:
+    run: r:latest analysis/calc_ir_hr.R wave3 Tx
+    needs: [filter_data_wave3]
+    outputs:
+      moderately_sensitive:
+        csv1: output/table_ir_hr/table_ir_hr_wave3_Tx.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave3_Tx_simple.csv
+
+  calc_ir_hr_wave3_HC:
+    run: r:latest analysis/calc_ir_hr.R wave3 HC
+    needs: [filter_data_wave3]
+    outputs:
+      moderately_sensitive:
+        csv1: output/table_ir_hr/table_ir_hr_wave3_HC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave3_HC_simple.csv
+
+  calc_ir_hr_wave3_RC:
+    run: r:latest analysis/calc_ir_hr.R wave3 RC
+    needs: [filter_data_wave3]
+    outputs:
+      moderately_sensitive:
+        csv1: output/table_ir_hr/table_ir_hr_wave3_RC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave3_RC_simple.csv
+
+  calc_ir_hr_wave3_IMM:
+    run: r:latest analysis/calc_ir_hr.R wave3 IMM
+    needs: [filter_data_wave3]
+    outputs:
+      moderately_sensitive:
+        csv1: output/table_ir_hr/table_ir_hr_wave3_IMM.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave3_IMM_simple.csv
+
+  calc_ir_hr_wave3_IMD:
+    run: r:latest analysis/calc_ir_hr.R wave3 IMD
+    needs: [filter_data_wave3]
+    outputs:
+      moderately_sensitive:
+        csv1: output/table_ir_hr/table_ir_hr_wave3_IMD.csv
+        csv2: output/table_ir_hr/table_ir_hr_wave3_IMD_simple.csv

@@ -67,7 +67,7 @@ subgroups_vctr <- c("N",
 # Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
 if (subgroup=="Tx") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-                                                         "any_transplant")]
+                                                         "any_transplant", "ckd_rrt")]
 }
 if (subgroup=="HC") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 

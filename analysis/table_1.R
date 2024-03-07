@@ -118,7 +118,7 @@ if (subgroup=="all") {
 }
 if (subgroup=="Tx") {
   counts = counts %>% select(-c(imm_subgroup, any_bone_marrow_type, any_bone_marrow_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
-                                any_transplant))
+                                any_transplant, ckd_rrt))
 }
 if (subgroup=="HC") {
   counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 

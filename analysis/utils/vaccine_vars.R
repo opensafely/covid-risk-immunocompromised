@@ -19,7 +19,6 @@ add_n_doses <- function(data){
     mutate(
       # dose counts at start of delta era
       n_doses_delta = fct_case_when(
-        covid_vax_date_3<=delta_start_date ~ "3+",
         covid_vax_date_2<=delta_start_date ~ "2",
         covid_vax_date_1<=delta_start_date ~ "1",
         TRUE ~ "0"
@@ -28,8 +27,7 @@ add_n_doses <- function(data){
       n_doses_delta = fct_case_when(
         n_doses_delta == "0" ~ "0",
         n_doses_delta == "1" ~ "1",
-        n_doses_delta == "2" ~ "2",
-        n_doses_delta == "3+" ~ "3+"
+        n_doses_delta == "2" ~ "2"
       ),
       
       # dose counts at start of omicron era
