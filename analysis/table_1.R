@@ -35,6 +35,7 @@ data_filtered <- read_rds(here::here("output", "filtered", paste0("input_",wave,
 rounding_threshold = 5
 redaction_threshold = 10
 
+
 ## Select subset
 if (subgroup=="all") {
   data_filtered = data_filtered
@@ -42,6 +43,21 @@ if (subgroup=="all") {
   data_filtered = subset(data_filtered, imm_subgroup==subgroup)
 } else {
   stop ("Arguments not specified correctly.")
+}
+
+
+## Merge 0/1 multimorb_cat in Tx subgroup due to colinearity with kidney Tx
+source(here("analysis", "utils", "fct_case_when.R"))
+if (subgroup=="Tx") {
+  data_filtered = data_filtered %>% 
+    mutate(
+      multimorb_cat = fct_case_when(
+        multimorb_cat=="0" | multimorb_cat=="1" ~ "0/1",
+        multimorb_cat=="2" ~ "2",
+        multimorb_cat=="3" ~ "3",
+        multimorb_cat=="4+" ~ "4+"
+      )
+    )
 }
 
 # Format data
@@ -122,7 +138,7 @@ if (subgroup=="Tx") {
 }
 if (subgroup=="HC") {
   counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, radio_chemo_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
-                                any_bone_marrow))
+                                any_bone_marrow, immunosuppression_diagnosis))
 }
 if (subgroup=="RC") {
   counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, any_bone_marrow_type, any_bone_marrow_cat, immunosuppression_medication_cat, immunosuppression_diagnosis_cat, 
@@ -136,7 +152,6 @@ if (subgroup=="IMD") {
   counts = counts %>% select(-c(imm_subgroup, any_transplant_type, any_transplant_cat, any_bone_marrow_type, any_bone_marrow_cat, radio_chemo_cat, immunosuppression_medication_cat, 
                                 immunosuppression_diagnosis))
 }
-
 
 
 ## Create table 1

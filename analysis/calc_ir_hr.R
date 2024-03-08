@@ -42,6 +42,20 @@ data_filtered <- read_rds(here::here("output", "filtered", paste0("input_",wave,
 ## Select subset
 data_filtered = subset(data_filtered, imm_subgroup==subgroup)
 
+## Merge 0/1 multimorb_cat in Tx subgroup due to colinearity with kidney Tx
+source(here("analysis", "utils", "fct_case_when.R"))
+if (subgroup=="Tx") {
+  data_filtered = data_filtered %>% 
+    mutate(
+      multimorb_cat = fct_case_when(
+        multimorb_cat=="0" | multimorb_cat=="1" ~ "0/1",
+        multimorb_cat=="2" ~ "2",
+        multimorb_cat=="3" ~ "3",
+        multimorb_cat=="4+" ~ "4+"
+      )
+    )
+}
+
 # create list of covariates
 subgroups_vctr <- c("N",
         # Demographics
@@ -71,7 +85,7 @@ if (subgroup=="Tx") {
 }
 if (subgroup=="HC") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-                                                         "any_transplant", "any_bone_marrow")]
+                                                         "any_transplant", "any_bone_marrow", "immunosuppression_diagnosis")]
 }
 if (subgroup=="RC") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat",  
@@ -85,8 +99,12 @@ if (subgroup=="IMD") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", 
                                                          "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")]
 }
-
-
+if (wave=="wave1") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_infection_group", "pre_wave_vax_infection_comb")]
+}
+if (wave=="wave2") {
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_vax_infection_comb")]
+}
 
 # Use loop to calculate incidence rates in each subgroup
 outcomes = c("severe", "death", "severe_sens")
@@ -312,6 +330,12 @@ for (o in 1:length(outcomes)) {
     ir_crude$outcome = outcomes[o]
     if(s==1 & o==1) { ir_collated = ir_crude } else { ir_collated = rbind(ir_collated, ir_crude) }
   }
+  
+  # Remove subgroup analyses if less than 100 events overall
+  if( ir_collated$events[ir_collated$variable=="N"]<100 ) {
+    ir_collated = subset(ir_collated, variable=="N")
+  }
+
 }
 
 # Reorder columns
