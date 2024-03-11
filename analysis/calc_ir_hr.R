@@ -201,112 +201,201 @@ for (o in 1:length(outcomes)) {
       ir_crude <- left_join(ir_crude, tidy, by = "group")
       
       # Fit modestly adjusted models (additionally include pre_wave_vaccine_group + pre_wave_infection_group)
-      if (group == "agegroup") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
-                         data = data_filtered)
-        
-      } else if (group == "sex") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
-                         data = data_filtered)
-        
-      } else if (group == "pre_wave_vaccine_group" | group == "n_doses_wave") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
-                         data = data_filtered)
-        
-      } else if (group == "pre_wave_infection_group" & wave!="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + strata(region)")), 
-                         data = data_filtered)
-        
-      } else if (group == "pre_wave_infection_group" & wave=="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "pre_wave_vax_infection_comb") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
-                         data = data_filtered)
-        
-      } else if (wave!="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
-                         data = data_filtered)
-        
+      if (wave=="wave3" | wave=="wave4") {
+        if (group == "agegroup") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "sex") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_vaccine_group" | group == "n_doses_wave") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_infection_group") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_vax_infection_comb") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
+                          data = data_filtered)
+          
+        } else {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+        }
       } else if (wave=="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
-                        data = data_filtered)
+        if (group == "agegroup") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "sex") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_infection_group") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
+                          data = data_filtered)
+          
+        } else {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+        }
+      } 
+      
+      if (wave!="wave1") {
+        # Pick out adjusted outputs for term of interest
+        tidy = broom.helpers::tidy_plus_plus(cox_adj, exponentiate = TRUE) 
+        tidy = subset(tidy, variable==paste0("factor(",group,")")) %>% 
+          rename(group = label) %>%
+          mutate(
+            group = as.character(group),
+            n_obs = plyr::round_any(n_obs, 5), # used to cross check IR calculations
+            n_event = plyr::round_any(n_event, 5),
+            exposure = plyr::round_any(exposure, 5)
+          ) %>%
+          select(group, n_obs, n_event, exposure, estimate, std.error, statistic, p.value, conf.low, conf.high)
+        names(tidy)[2:ncol(tidy)] = paste0(names(tidy)[2:ncol(tidy)],"_adj")
+        
+        # Merge with crude IRs
+        ir_crude <- left_join(ir_crude, tidy, by = "group")
+      } else {
+        ir_crude[,c("n_obs_adj", "n_event_adj", "exposure_adj", "estimate_adj", "std.error_adj", "statistic_adj", 
+                   "p.value_adj", "conf.low_adj", "conf.high_adj")] = NA
       }
       
-      # Pick out adjusted outputs for term of interest
-      tidy = broom.helpers::tidy_plus_plus(cox_adj, exponentiate = TRUE) 
-      tidy = subset(tidy, variable==paste0("factor(",group,")")) %>% 
-        rename(group = label) %>%
-        mutate(
-          group = as.character(group),
-          n_obs = plyr::round_any(n_obs, 5), # used to cross check IR calculations
-          n_event = plyr::round_any(n_event, 5),
-          exposure = plyr::round_any(exposure, 5)
-        ) %>%
-        select(group, n_obs, n_event, exposure, estimate, std.error, statistic, p.value, conf.low, conf.high)
-      names(tidy)[2:ncol(tidy)] = paste0(names(tidy)[2:ncol(tidy)],"_adj")
-      
-      # Merge with crude IRs
-      ir_crude <- left_join(ir_crude, tidy, by = "group")
-      
       # Fit fully adjusted models (additionally include ethnicity + imd + multimorb_cat)
-      if (group == "agegroup") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group +
+      if (wave=="wave3" | wave=="wave4") {
+        
+        if (group == "agegroup") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group +
                                 ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "sex") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else if (group == "sex") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-      
-      } else if (group == "ethnicity") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else if (group == "ethnicity") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           factor(ethnicity) + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-       
-      } else if (group == "imd") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else if (group == "imd") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + factor(imd) + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-      
-      } else if (group == "multimorb_cat") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else if (group == "multimorb_cat") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + imd + factor(multimorb_cat) + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "pre_wave_vaccine_group" | group == "n_doses_wave") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_vaccine_group" | group == "n_doses_wave") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "pre_wave_infection_group" & wave!="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + 
+                          data = data_filtered)
+          
+        } else if (group == "pre_wave_vax_infection_comb") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "pre_wave_infection_group" & wave=="wave2") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
-                                          ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-        
-      } else if (group == "pre_wave_vax_infection_comb") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
-                                          ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
-      
-      } else if (group %in% c("care_home", "smoking_status_comb",
-                              "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-                              "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                          data = data_filtered)
+          
+        } else if (group %in% c("care_home", "smoking_status_comb",
+                                "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                                "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + imd + strata(region)")), 
-                        data = data_filtered)
-        
-      } else {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
+                          data = data_filtered)
+          
+        } else {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
-                        data = data_filtered)
+                          data = data_filtered)
+        }
+        
+      } else if (wave=="wave2") {
+        
+        if (group == "agegroup") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_infection_group +
+                                ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "sex") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_infection_group + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "ethnicity") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_infection_group + 
+                                          factor(ethnicity) + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "imd") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_infection_group + 
+                                          ethnicity + factor(imd) + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "multimorb_cat") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + pre_wave_infection_group + 
+                                          ethnicity + imd + factor(multimorb_cat) + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group %in% c("care_home", "smoking_status_comb",
+                                "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                                "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group +
+                                          ethnicity + imd + strata(region)")), 
+                          data = data_filtered)
+          
+        } else {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+        }
+        
+      } else if (wave=="wave1") {
+        
+        if (group == "agegroup") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex +
+                                ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "sex") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "ethnicity") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + 
+                                          factor(ethnicity) + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "imd") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + 
+                                          ethnicity + factor(imd) + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "multimorb_cat") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + 
+                                          ethnicity + imd + factor(multimorb_cat) + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group %in% c("care_home", "smoking_status_comb",
+                                "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
+                                "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                                          ethnicity + imd + strata(region)")), 
+                          data = data_filtered)
+          
+        } else {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+        }
       }
       
       # Pick out adjusted outputs for term of interest
