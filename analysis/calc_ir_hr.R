@@ -330,17 +330,20 @@ for (o in 1:length(outcomes)) {
     ir_crude$outcome = outcomes[o]
     if(s==1 & o==1) { ir_collated = ir_crude } else { ir_collated = rbind(ir_collated, ir_crude) }
   }
-  
-  # Remove subgroup analyses if less than 100 events overall
-  if( ir_collated$events[ir_collated$variable=="N"]<100 ) {
-    ir_collated = subset(ir_collated, variable=="N")
-  }
-
 }
 
 # Reorder columns
 ir_collated = ir_collated %>% relocate(variable,outcome)
 
+# Remove analyses if <100 events total
+for (o in 1:length(outcomes)) {
+  
+  selected_outcome = outcomes[o]
+  
+  if ( ir_collated$events[ir_collated$outcome==outcomes[o] & ir_collated$variable=="N"]<100 ) {
+    ir_collated = ir_collated %>% filter(outcome!= selected_outcome | variable=="N")
+  }
+}
 
 # Save output
 output_dir <- here("output", "table_ir_hr")
