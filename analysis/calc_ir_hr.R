@@ -100,10 +100,12 @@ if (subgroup=="IMD") {
                                                          "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")]
 }
 if (wave=="wave1") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_infection_group", "pre_wave_vax_infection_comb")]
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_infection_group", "pre_wave_vax_infection_comb", 
+                                                         "radio_chemo_cat")] # remove radio_chemo_cat as all within 6m where observed
 }
 if (wave=="wave2") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_vax_infection_comb")]
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_vax_infection_comb", 
+                                                         "radio_chemo_cat")] # remove radio_chemo_cat as all within 6m where observed
 }
 
 # Use loop to calculate incidence rates in each subgroup
@@ -131,6 +133,7 @@ for (o in 1:length(outcomes)) {
     # Assign selected variable as 'group' in filtered data 
     group = subgroups_vctr[s]
     data_filtered = data_filtered %>% mutate(group = get(subgroups_vctr[s]))
+    print(paste0("running model for variable: ",group,", outcome: ", selected_outcome))
     
     # Calculate crude incidence rates for variable subgroups
     ir_crude = data_filtered %>%
@@ -210,17 +213,25 @@ for (o in 1:length(outcomes)) {
         cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
         
-      } else if (group == "pre_wave_infection_group") {
+      } else if (group == "pre_wave_infection_group" & wave!="wave2") {
         cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + strata(region)")), 
                          data = data_filtered)
         
+      } else if (group == "pre_wave_infection_group" & wave=="wave2") {
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
+                        data = data_filtered)
+        
       } else if (group == "pre_wave_vax_infection_comb") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + + rcs(age, 4) + sex + strata(region)")), 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + strata(region)")), 
                          data = data_filtered)
         
-      } else {
+      } else if (wave!="wave2") {
         cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                          data = data_filtered)
+        
+      } else if (wave=="wave2") {
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + strata(region)")), 
+                        data = data_filtered)
       }
       
       # Pick out adjusted outputs for term of interest
@@ -270,20 +281,25 @@ for (o in 1:length(outcomes)) {
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                         data = data_filtered)
         
-      } else if (group == "pre_wave_infection_group") {
+      } else if (group == "pre_wave_infection_group" & wave!="wave2") {
         cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                         data = data_filtered)
         
+      } else if (group == "pre_wave_infection_group" & wave=="wave2") {
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                        data = data_filtered)
+        
       } else if (group == "pre_wave_vax_infection_comb") {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + + rcs(age, 4) + sex + 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                         data = data_filtered)
       
       } else if (group %in% c("care_home", "smoking_status_comb",
                               "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
                               "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
-        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + + rcs(age, 4) + sex + 
+        cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
                                           ethnicity + imd + strata(region)")), 
                         data = data_filtered)
         
