@@ -419,8 +419,8 @@ for (o in 1:length(outcomes)) {
     # Apply additional redactions
     redaction_columns = c("events", "time", "ir", "ir_lower_ci", "ir_upper_ci", model_cols)
     for (i in 1:nrow(ir_crude)) {
-      if (as.numeric(ir_crude$events[i])>0 & as.numeric(ir_crude$events[i])<=redaction_threshold) { ir_crude[i,redaction_columns] = NA }
-      if (as.numeric(ir_crude$n[i])>0 & as.numeric(ir_crude$n[i])<=redaction_threshold) { ir_crude[i,c("n", redaction_columns)] = NA }
+      if (as.numeric(ir_crude$events[i])<=redaction_threshold) { ir_crude[i,redaction_columns] = NA }
+      if (as.numeric(ir_crude$n[i])<=redaction_threshold) { ir_crude[i,c("n", redaction_columns)] = NA }
     }
     
     # Secondary redactions

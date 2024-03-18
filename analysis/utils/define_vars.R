@@ -31,12 +31,12 @@ process_data <- function(data_extracted) {
     data_extracted %>%
     mutate(
       agegroup = fct_case_when(
-        agegroup == "50-59" ~ "50-59", # = reference
-        agegroup == "18-39" ~ "18-39",
-        agegroup == "40-49" ~ "40-49",
-        agegroup == "60-69" ~ "60-69",
+        agegroup == "80plus" ~ "80plus", # = reference
         agegroup == "70-79" ~ "70-79",
-        agegroup == "80plus" ~ "80plus",
+        agegroup == "60-69" ~ "60-69",
+        agegroup == "50-59" ~ "50-59", 
+        agegroup == "40-49" ~ "40-49",
+        agegroup == "18-39" ~ "18-39",
         TRUE ~ NA_character_
       ),
       # no missings should occur as individuals with
