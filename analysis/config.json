@@ -2,6 +2,7 @@
     "wave2": {"start_date": "2020-09-07", "end_date": "2021-04-24"},
     "wave3": {"start_date": "2021-05-28", "end_date": "2021-12-14"},
     "wave4": {"start_date": "2021-12-15", "end_date": "2022-04-29"},
+    "wave5": {"start_date": "2023-11-14", "end_date": "2024-01-31"},
     "demographic_vars" : [
         "patient_id",
         "has_follow_up",
