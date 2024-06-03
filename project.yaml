@@ -6,164 +6,164 @@ expectations:
 actions:
 
 
-  ## WAVE 5 ##
+  ## WAVE JN1 (aka contemporary) ##
 
   # Extract data
-  generate_study_population_wave5:
+  generate_study_population_wavejn1:
     run: >
       cohortextractor:latest generate_cohort
-        --study-definition study_definition_wave5
+        --study-definition study_definition_wavejn1
         --skip-existing
         --output-format=csv.gz
     outputs:
       highly_sensitive:
-        cohort: output/input_wave5.csv.gz
+        cohort: output/input_wavejn1.csv.gz
 
   # Process data
-  process_data_wave5:
-    run: r:latest analysis/data_process.R wave5
-    needs: [generate_study_population_wave5]
+  process_data_wavejn1:
+    run: r:latest analysis/data_process.R wavejn1
+    needs: [generate_study_population_wavejn1]
     outputs:
       highly_sensitive:
-        rds: output/processed/input_wave5.rds
+        rds: output/processed/input_wavejn1.rds
         
   # Skim data
-  skim_data_wave5:
-    run: r:latest analysis/data_skim.R output/processed/input_wave5.rds output/data_properties
-    needs: [process_data_wave5]
+  skim_data_wavejn1:
+    run: r:latest analysis/data_skim.R output/processed/input_wavejn1.rds output/data_properties
+    needs: [process_data_wavejn1]
     outputs:
       moderately_sensitive:
-        txt1: output/data_properties/input_wave5_skim.txt
-        txt2: output/data_properties/input_wave5_coltypes.txt
-        txt3: output/data_properties/input_wave5_tabulate.txt
+        txt1: output/data_properties/input_wavejn1_skim.txt
+        txt2: output/data_properties/input_wavejn1_coltypes.txt
+        txt3: output/data_properties/input_wavejn1_tabulate.txt
         
   # Filter data
-  filter_data_wave5:
-    run: r:latest analysis/data_selection.R wave5
-    needs: [process_data_wave5]
+  filter_data_wavejn1:
+    run: r:latest analysis/data_selection.R wavejn1
+    needs: [process_data_wavejn1]
     outputs:
       highly_sensitive:
-        rds: output/filtered/input_wave5.rds
+        rds: output/filtered/input_wavejn1.rds
       moderately_sensitive:
-        csv: output/flowchart/flowchart_wave5.csv
+        csv: output/flowchart/flowchart_wavejn1.csv
 
   # Immunosuppression combinations
-  imm_comb_wave5:
-    run: r:latest analysis/imm_comb.R wave5
-    needs: [filter_data_wave5]
+  imm_comb_wavejn1:
+    run: r:latest analysis/imm_comb.R wavejn1
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/imm_comb/imm_comb_wave5_broad.csv
-        csv2: output/imm_comb/imm_comb_wave5_narrow.csv
+        csv1: output/imm_comb/imm_comb_wavejn1_broad.csv
+        csv2: output/imm_comb/imm_comb_wavejn1_narrow.csv
 
   # Table 1
-  table_1_wave5_all:
-    run: r:latest analysis/table_1.R wave5 all
-    needs: [filter_data_wave5]
+  table_1_wavejn1_all:
+    run: r:latest analysis/table_1.R wavejn1 all
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_all.rds
+        data: output/table_1/table_1_wavejn1_all.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_all.html
-        csv: output/table_1/table_1_wave5_all.csv
+        table: output/table_1/table_1_wavejn1_all.html
+        csv: output/table_1/table_1_wavejn1_all.csv
         
-  table_1_wave5_Tx:
-    run: r:latest analysis/table_1.R wave5 Tx
-    needs: [filter_data_wave5]
+  table_1_wavejn1_Tx:
+    run: r:latest analysis/table_1.R wavejn1 Tx
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_Tx.rds
+        data: output/table_1/table_1_wavejn1_Tx.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_Tx.html
-        csv: output/table_1/table_1_wave5_Tx.csv
+        table: output/table_1/table_1_wavejn1_Tx.html
+        csv: output/table_1/table_1_wavejn1_Tx.csv
 
-  table_1_wave5_HC:
-    run: r:latest analysis/table_1.R wave5 HC
-    needs: [filter_data_wave5]
+  table_1_wavejn1_HC:
+    run: r:latest analysis/table_1.R wavejn1 HC
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_HC.rds
+        data: output/table_1/table_1_wavejn1_HC.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_HC.html
-        csv: output/table_1/table_1_wave5_HC.csv
+        table: output/table_1/table_1_wavejn1_HC.html
+        csv: output/table_1/table_1_wavejn1_HC.csv
 
-  table_1_wave5_RC:
-    run: r:latest analysis/table_1.R wave5 RC
-    needs: [filter_data_wave5]
+  table_1_wavejn1_RC:
+    run: r:latest analysis/table_1.R wavejn1 RC
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_RC.rds
+        data: output/table_1/table_1_wavejn1_RC.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_RC.html
-        csv: output/table_1/table_1_wave5_RC.csv
+        table: output/table_1/table_1_wavejn1_RC.html
+        csv: output/table_1/table_1_wavejn1_RC.csv
         
-  table_1_wave5_IMM:
-    run: r:latest analysis/table_1.R wave5 IMM
-    needs: [filter_data_wave5]
+  table_1_wavejn1_IMM:
+    run: r:latest analysis/table_1.R wavejn1 IMM
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_IMM.rds
+        data: output/table_1/table_1_wavejn1_IMM.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_IMM.html
-        csv: output/table_1/table_1_wave5_IMM.csv
+        table: output/table_1/table_1_wavejn1_IMM.html
+        csv: output/table_1/table_1_wavejn1_IMM.csv
 
-  table_1_wave5_IMD:
-    run: r:latest analysis/table_1.R wave5 IMD
-    needs: [filter_data_wave5]
+  table_1_wavejn1_IMD:
+    run: r:latest analysis/table_1.R wavejn1 IMD
+    needs: [filter_data_wavejn1]
     outputs:
       highly_sensitive:
-        data: output/table_1/table_1_wave5_IMD.rds
+        data: output/table_1/table_1_wavejn1_IMD.rds
       moderately_sensitive:
-        table: output/table_1/table_1_wave5_IMD.html
-        csv: output/table_1/table_1_wave5_IMD.csv
+        table: output/table_1/table_1_wavejn1_IMD.html
+        csv: output/table_1/table_1_wavejn1_IMD.csv
 
-  collate_table_1_wave5:
-    run: r:latest analysis/collate_table_1.R wave5
-    needs: [table_1_wave5_all, table_1_wave5_Tx, table_1_wave5_HC, table_1_wave5_RC, table_1_wave5_IMM, table_1_wave5_IMD]
+  collate_table_1_wavejn1:
+    run: r:latest analysis/collate_table_1.R wavejn1
+    needs: [table_1_wavejn1_all, table_1_wavejn1_Tx, table_1_wavejn1_HC, table_1_wavejn1_RC, table_1_wavejn1_IMM, table_1_wavejn1_IMD]
     outputs:
       moderately_sensitive:
-        csv: output/table_1/table_1_wave5_collated.csv
+        csv: output/table_1/table_1_wavejn1_collated.csv
 
   # Table - incidence rates
-  calc_ir_hr_wave5_Tx:
-    run: r:latest analysis/calc_ir_hr.R wave5 Tx
-    needs: [filter_data_wave5]
+  calc_ir_hr_wavejn1_Tx:
+    run: r:latest analysis/calc_ir_hr.R wavejn1 Tx
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/table_ir_hr/table_ir_hr_wave5_Tx.csv
-        csv2: output/table_ir_hr/table_ir_hr_wave5_Tx_simple.csv
+        csv1: output/table_ir_hr/table_ir_hr_wavejn1_Tx.csv
+        csv2: output/table_ir_hr/table_ir_hr_wavejn1_Tx_simple.csv
 
-  calc_ir_hr_wave5_HC:
-    run: r:latest analysis/calc_ir_hr.R wave5 HC
-    needs: [filter_data_wave5]
+  calc_ir_hr_wavejn1_HC:
+    run: r:latest analysis/calc_ir_hr.R wavejn1 HC
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/table_ir_hr/table_ir_hr_wave5_HC.csv
-        csv2: output/table_ir_hr/table_ir_hr_wave5_HC_simple.csv
+        csv1: output/table_ir_hr/table_ir_hr_wavejn1_HC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wavejn1_HC_simple.csv
 
-  calc_ir_hr_wave5_RC:
-    run: r:latest analysis/calc_ir_hr.R wave5 RC
-    needs: [filter_data_wave5]
+  calc_ir_hr_wavejn1_RC:
+    run: r:latest analysis/calc_ir_hr.R wavejn1 RC
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/table_ir_hr/table_ir_hr_wave5_RC.csv
-        csv2: output/table_ir_hr/table_ir_hr_wave5_RC_simple.csv
+        csv1: output/table_ir_hr/table_ir_hr_wavejn1_RC.csv
+        csv2: output/table_ir_hr/table_ir_hr_wavejn1_RC_simple.csv
 
-  calc_ir_hr_wave5_IMM:
-    run: r:latest analysis/calc_ir_hr.R wave5 IMM
-    needs: [filter_data_wave5]
+  calc_ir_hr_wavejn1_IMM:
+    run: r:latest analysis/calc_ir_hr.R wavejn1 IMM
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/table_ir_hr/table_ir_hr_wave5_IMM.csv
-        csv2: output/table_ir_hr/table_ir_hr_wave5_IMM_simple.csv
+        csv1: output/table_ir_hr/table_ir_hr_wavejn1_IMM.csv
+        csv2: output/table_ir_hr/table_ir_hr_wavejn1_IMM_simple.csv
 
-  calc_ir_hr_wave5_IMD:
-    run: r:latest analysis/calc_ir_hr.R wave5 IMD
-    needs: [filter_data_wave5]
+  calc_ir_hr_wavejn1_IMD:
+    run: r:latest analysis/calc_ir_hr.R wavejn1 IMD
+    needs: [filter_data_wavejn1]
     outputs:
       moderately_sensitive:
-        csv1: output/table_ir_hr/table_ir_hr_wave5_IMD.csv
-        csv2: output/table_ir_hr/table_ir_hr_wave5_IMD_simple.csv
+        csv1: output/table_ir_hr/table_ir_hr_wavejn1_IMD.csv
+        csv2: output/table_ir_hr/table_ir_hr_wavejn1_IMD_simple.csv
 
 
 
