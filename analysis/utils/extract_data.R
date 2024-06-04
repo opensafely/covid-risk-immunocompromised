@@ -117,7 +117,12 @@ extract_data <- function(file_name) {
         delta_positive_test_date = col_date(format = "%Y-%m-%d"),	
         delta_hospitalisation_date = col_date(format = "%Y-%m-%d"),
         delta_emergency_date = col_date(format = "%Y-%m-%d"),	
-        omicron_positive_test_date = col_date(format = "%Y-%m-%d"),
+        early_omicron_positive_test_date = col_date(format = "%Y-%m-%d"),
+        early_omicron_hospitalisation_date = col_date(format = "%Y-%m-%d"),
+        early_omicron_emergency_date = col_date(format = "%Y-%m-%d"),
+        late_omicron_positive_test_date = col_date(format = "%Y-%m-%d"),
+        late_omicron_hospitalisation_date = col_date(format = "%Y-%m-%d"),
+        late_omicron_emergency_date = col_date(format = "%Y-%m-%d"),
         
         # outcomes (including censoring events)
         covid_hospitalisation_date = col_date(format = "%Y-%m-%d"),
@@ -139,6 +144,10 @@ extract_data <- function(file_name) {
       delta_end_date = as.Date("2021-12-14", format = "%Y-%m-%d"),
       omicron_start_date = as.Date("2021-12-15", format = "%Y-%m-%d"),
       omicron_end_date = as.Date("2022-04-29", format = "%Y-%m-%d"),
+      early_omicron_start_date = as.Date("2021-12-15", format = "%Y-%m-%d"),
+      early_omicron_end_date = as.Date("2022-11-13", format = "%Y-%m-%d"),
+      late_omicron_start_date = as.Date("2022-11-14", format = "%Y-%m-%d"),
+      late_omicron_end_date = as.Date("2023-11-13", format = "%Y-%m-%d"),
     ) %>%
     # Floor dates to avoid timestamps causing inequalities for dates on the same day
     mutate(across(where(is.Date), 
