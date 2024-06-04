@@ -165,93 +165,139 @@ era_exposure_variables = dict(
             },
     ),
    
-# EARLY OMICRON
+    # EARLY OMICRON (BA.1, BA.2)
     # Positive test
-    early_omicron_positive_test_date = patients.with_test_result_in_sgss(
+    BA1_2_omicron_positive_test_date = patients.with_test_result_in_sgss(
         pathogen = "SARS-CoV-2",
         test_result = "positive",
         returning = "date",
         date_format = "YYYY-MM-DD",
-        between=["2021-12-15","2022-11-13"],
+        between=["2021-12-15","2022-06-05"],
         find_last_match_in_period=True,
         restrict_to_earliest_specimen_date=False,
         return_expectations = {
-            "date": {"earliest": "2021-12-15", "latest": "2022-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2021-12-15", "latest": "2022-06-05"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },
     ),
       
     # Hospitalisation
-    early_omicron_hospitalisation_date = patients.admitted_to_hospital(
+    BA1_2_omicron_hospitalisation_date = patients.admitted_to_hospital(
         with_these_diagnoses = codelists.covid_icd10,
         with_admission_method = ["21", "22", "23", "24", "25", "2A", "2B", "2C", "2D", "28"],
         returning = "date_admitted",
         date_format="YYYY-MM-DD",
-        between=["2021-12-15","2022-11-13"],
+        between=["2021-12-15","2022-06-05"],
         find_last_match_in_period=True,
         return_expectations = {
-            "date": {"earliest": "2021-12-15", "latest": "2022-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2021-12-15", "latest": "2022-06-05"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },
     ),
     
     # A&E
-    early_omicron_emergency_date = patients.attended_emergency_care(
+    BA1_2_omicron_emergency_date = patients.attended_emergency_care(
         with_these_diagnoses = codelists.covid_emergency,
         returning="date_arrived",
         date_format="YYYY-MM-DD",
-        between=["2021-12-15","2022-11-13"],
+        between=["2021-12-15","2022-06-05"],
         find_last_match_in_period=True,
         return_expectations = {
-            "date": {"earliest": "2021-12-15", "latest": "2022-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2021-12-15", "latest": "2022-06-05"}, # need both earliest/latest to obtain expected incidence
+            "rate": "uniform",
+            "incidence": 0.02,
+            },
+    ),
+    
+    # MID OMICRON (BA.5)
+    # Positive test
+    BA5_omicron_positive_test_date = patients.with_test_result_in_sgss(
+        pathogen = "SARS-CoV-2",
+        test_result = "positive",
+        returning = "date",
+        date_format = "YYYY-MM-DD",
+        between=["2022-06-06","2023-02-05"],
+        find_last_match_in_period=True,
+        restrict_to_earliest_specimen_date=False,
+        return_expectations = {
+            "date": {"earliest": "2022-06-06", "latest": "2023-02-05"}, # need both earliest/latest to obtain expected incidence
+            "rate": "uniform",
+            "incidence": 0.02,
+            },
+    ),
+      
+    # Hospitalisation
+    BA5_omicron_hospitalisation_date = patients.admitted_to_hospital(
+        with_these_diagnoses = codelists.covid_icd10,
+        with_admission_method = ["21", "22", "23", "24", "25", "2A", "2B", "2C", "2D", "28"],
+        returning = "date_admitted",
+        date_format="YYYY-MM-DD",
+        between=["2022-06-06","2023-02-05"],
+        find_last_match_in_period=True,
+        return_expectations = {
+            "date": {"earliest": "2022-06-06", "latest": "2023-02-05"}, # need both earliest/latest to obtain expected incidence
+            "rate": "uniform",
+            "incidence": 0.02,
+            },
+    ),
+    
+    # A&E
+    BA5_omicron_emergency_date = patients.attended_emergency_care(
+        with_these_diagnoses = codelists.covid_emergency,
+        returning="date_arrived",
+        date_format="YYYY-MM-DD",
+        between=["2022-06-06","2023-02-05"],
+        find_last_match_in_period=True,
+        return_expectations = {
+            "date": {"earliest": "2022-06-06", "latest": "2023-02-05"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },
     ),
 
-# LATE OMICRON
+    # LATE OMICRON (XBB)
     # Positive test
-    late_omicron_positive_test_date = patients.with_test_result_in_sgss(
+    XBB_omicron_positive_test_date = patients.with_test_result_in_sgss(
         pathogen = "SARS-CoV-2",
         test_result = "positive",
         returning = "date",
         date_format = "YYYY-MM-DD",
-        between=["2022-11-14","2023-11-13"],
+        between=["2023-02-06","2023-12-03"],
         find_last_match_in_period=True,
         restrict_to_earliest_specimen_date=False,
         return_expectations = {
-            "date": {"earliest": "2022-11-14", "latest": "2023-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2023-02-06", "latest": "2023-12-03"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },
     ),
       
     # Hospitalisation
-    late_omicron_hospitalisation_date = patients.admitted_to_hospital(
+    XBB_omicron_hospitalisation_date = patients.admitted_to_hospital(
         with_these_diagnoses = codelists.covid_icd10,
         with_admission_method = ["21", "22", "23", "24", "25", "2A", "2B", "2C", "2D", "28"],
         returning = "date_admitted",
         date_format="YYYY-MM-DD",
-        between=["2022-11-14","2023-11-13"],
+        between=["2023-02-06","2023-12-03"],
         find_last_match_in_period=True,
         return_expectations = {
-            "date": {"earliest": "2022-11-14", "latest": "2023-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2023-02-06", "latest": "2023-12-03"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },
     ),
     
     # A&E
-    late_omicron_emergency_date = patients.attended_emergency_care(
+    XBB_omicron_emergency_date = patients.attended_emergency_care(
         with_these_diagnoses = codelists.covid_emergency,
         returning="date_arrived",
         date_format="YYYY-MM-DD",
-        between=["2022-11-14","2023-11-13"],
+        between=["2023-02-06","2023-12-03"],
         find_last_match_in_period=True,
         return_expectations = {
-            "date": {"earliest": "2022-11-14", "latest": "2023-11-13"}, # need both earliest/latest to obtain expected incidence
+            "date": {"earliest": "2023-02-06", "latest": "2023-12-03"}, # need both earliest/latest to obtain expected incidence
             "rate": "uniform",
             "incidence": 0.02,
             },

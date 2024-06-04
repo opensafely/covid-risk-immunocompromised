@@ -81,6 +81,8 @@
         "covid_vax_date_4",
         "covid_vax_date_5",
         "covid_vax_date_6",
+        "covid_vax_date_7",
+        "covid_vax_date_8",
         "n_doses_wave",
         "pre_wave_vaccine_group",
         "pre_wave_last_vax_date",
