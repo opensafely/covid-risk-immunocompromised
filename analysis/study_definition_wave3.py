@@ -133,8 +133,7 @@ study = StudyDefinition(
     immunosuppression_medication = patients.with_these_medications(
         codelists.immunosuppression_medication_codes,
         returning="binary_flag",
-        #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
-        between=["2020-07-01","index_date"], # use for waves 3 and 4
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: immunosuppression_medication_date
         date_format="YYYY-MM-DD",
@@ -144,8 +143,7 @@ study = StudyDefinition(
     immunosuppression_admin = patients.with_these_clinical_events(
         codelists.immunosuppression_admin_codes,
         returning="binary_flag",
-        #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
-        between=["2020-07-01","index_date"], # use for waves 3 and 4
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: immunosuppression_admin_date
         date_format="YYYY-MM-DD",
@@ -155,8 +153,7 @@ study = StudyDefinition(
     radio_chemo = patients.with_these_clinical_events(
         codelists.radio_chemo_codes,
         returning="binary_flag",
-        #between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
-        between=["2020-07-01","index_date"], # use for waves 3 and 4
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: radio_chemo_date
         date_format="YYYY-MM-DD",
@@ -318,5 +315,32 @@ study = StudyDefinition(
             "date": {"earliest": "2020-12-01", "latest": end_date},
             "incidence": 0.5,
         },
+    ),
+    
+    # Date of seventh COVID vaccination (booster) -
+    covid_vax_date_7=patients.with_tpp_vaccination_record(
+        target_disease_matches="SARS-2 CORONAVIRUS",
+        between=["covid_vax_date_6 + 14 days", end_date],  # from day after previous dose
+        find_first_match_in_period=True,
+        returning="date",
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest": "2020-12-01", "latest": end_date},
+            "incidence": 0.5,
+        },
+
+
+    # Date of eigth COVID vaccination (booster) -
+    covid_vax_date_8=patients.with_tpp_vaccination_record(
+        target_disease_matches="SARS-2 CORONAVIRUS",
+        between=["covid_vax_date_7 + 14 days", end_date],  # from day after previous dose
+        find_first_match_in_period=True,
+        returning="date",
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest": "2020-12-01", "latest": end_date},
+            "incidence": 0.5,
+        },
+
     ),
 )
