@@ -328,7 +328,7 @@ study = StudyDefinition(
             "date": {"earliest": "2020-12-01", "latest": end_date},
             "incidence": 0.5,
         },
-
+    ),
 
     # Date of eigth COVID vaccination (booster) -
     covid_vax_date_8=patients.with_tpp_vaccination_record(
@@ -341,6 +341,5 @@ study = StudyDefinition(
             "date": {"earliest": "2020-12-01", "latest": end_date},
             "incidence": 0.5,
         },
-
     ),
 )
