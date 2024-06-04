@@ -159,7 +159,7 @@ study = StudyDefinition(
         between=["2020-07-01","index_date"], # use for waves 3 and 4
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: radio_chemo_date
-        date_format="YYYY-MM-DD",
+        date_format="YYYY-MM-DD",   
     ),
 
 

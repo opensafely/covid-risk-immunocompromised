@@ -248,11 +248,16 @@ process_data <- function(data_extracted) {
       alpha_covid_cat = as.numeric(!is.na(alpha_covid_max_date)),
       delta_covid_max_date = pmax(delta_positive_test_date, delta_emergency_date, delta_hospitalisation_date, na.rm=TRUE),
       delta_covid_cat = as.numeric(!is.na(delta_covid_max_date)),
+      early_omicron_covid_max_date = pmax(early_omicron_positive_test_date, early_omicron_emergency_date, early_omicron_hospitalisation_date, na.rm=TRUE),
+      early_omicron_covid_cat = as.numeric(!is.na(early_omicron_covid_max_date)),
+      late_omicron_covid_max_date = pmax(late_omicron_positive_test_date, late_omicron_emergency_date, late_omicron_hospitalisation_date, na.rm=TRUE),
+      late_omicron_covid_cat = as.numeric(!is.na(late_omicron_covid_max_date)),
       
       # Calculate difference between latest infection and start of next era
       pre_alpha_infection_days = as.numeric(alpha_start_date - wt_covid_max_date),
       pre_delta_infection_days = as.numeric(delta_start_date - alpha_covid_max_date),
-      pre_omicron_infection_days = as.numeric(omicron_start_date - delta_covid_max_date),
+      pre_early_omicron_infection_days = as.numeric(early_omicron_start_date - delta_covid_max_date),
+      pre_late_omicron_infection_days = as.numeric(late_omicron_start_date - early_omicron_covid_max_date),
       
       # Prior infection groups (assign to most recent era)
       pre_alpha_infection_group = fct_case_when(
