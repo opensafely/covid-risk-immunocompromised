@@ -44,7 +44,6 @@ add_n_doses <- function(data){
         n_doses_omicron == "2" ~ "2",
         n_doses_omicron == "3+" ~ "3+"
       ),
-      
       # dose counts at start of omicron era
       n_doses_jn1 = fct_case_when(
         covid_vax_date_7<=jn1_start_date ~ "7+",
@@ -61,7 +60,7 @@ add_n_doses <- function(data){
         n_doses_jn1 %in% c("0", "1", "2") ~ "0-2",
         n_doses_jn1 %in% c("3", "4") ~ "3-4",
         n_doses_jn1 %in% c("5", "6") ~ "5-6",
-        n_doses_jn1 == "7+" ~ "7+",
+        n_doses_jn1 == "7+" ~ "7+"
       ),
     )
 }
