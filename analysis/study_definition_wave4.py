@@ -342,4 +342,30 @@ study = StudyDefinition(
             "incidence": 0.5,
         },
     ),
+    
+    # Date of ninth COVID vaccination (booster) -
+    covid_vax_date_9=patients.with_tpp_vaccination_record(
+        target_disease_matches="SARS-2 CORONAVIRUS",
+        between=["covid_vax_date_8 + 14 days", end_date],  # from day after previous dose
+        find_first_match_in_period=True,
+        returning="date",
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest": "2020-12-01", "latest": end_date},
+            "incidence": 0.5,
+        },
+    ),
+    
+    # Date of tenth COVID vaccination (booster) -
+    covid_vax_date_10=patients.with_tpp_vaccination_record(
+        target_disease_matches="SARS-2 CORONAVIRUS",
+        between=["covid_vax_date_9 + 14 days", end_date],  # from day after previous dose
+        find_first_match_in_period=True,
+        returning="date",
+        date_format="YYYY-MM-DD",
+        return_expectations={
+            "date": {"earliest": "2020-12-01", "latest": end_date},
+            "incidence": 0.5,
+        },
+    ),
 )
