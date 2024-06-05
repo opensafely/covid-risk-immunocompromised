@@ -42,6 +42,7 @@ if (wave=="wave1") { index_date <- config$wave1$start_date }
 if (wave=="wave2") { index_date <- config$wave2$start_date }
 if (wave=="wave3") { index_date <- config$wave3$start_date }
 if (wave=="wave4") { index_date <- config$wave4$start_date }
+if (wave=="wavejn1") { index_date <- config$wavejn1$start_date }
 
 # Load data ---
 # Find input file names by globbing
@@ -66,18 +67,18 @@ data_processed <- data_processed %>%
   add_n_doses() %>%
   last_dose_pre_era(era="delta") %>%
   last_dose_pre_era(era="omicron") %>%
+  last_dose_pre_era(era="jn1") %>%
   first_dose_post_era(era="alpha") %>%
   first_dose_post_era(era="delta") %>%
-  first_dose_post_era(era="omicron") 
-
+  first_dose_post_era(era="omicron") %>%
+  first_dose_post_era(era="jn1")
+  
 ## Set wave-specific start/stop/censor dates
 if (wave=="wave1") {
   data_processed = data_processed %>%
     mutate(
       wave_start_date = wt_start_date,
       wave_end_date = wt_end_date,
-      wave_covid_cat = wt_covid_cat,
-      wave_covid_max_date = wt_covid_max_date,
       pre_wave_infection_group = "No prior infection",
       pre_wave_infection_days = NA,
       n_doses_wave = 0,
@@ -93,8 +94,6 @@ if (wave=="wave2") {
     mutate(
       wave_start_date = alpha_start_date,
       wave_end_date = alpha_end_date,
-      wave_covid_cat = alpha_covid_cat,
-      wave_covid_max_date = alpha_covid_max_date,
       pre_wave_infection_group = pre_alpha_infection_group,
       pre_wave_infection_days = pre_alpha_infection_days,
       n_doses_wave = 0,
@@ -110,8 +109,6 @@ if (wave=="wave3") {
     mutate(
       wave_start_date = delta_start_date,
       wave_end_date = delta_end_date,
-      wave_covid_cat = delta_covid_cat,
-      wave_covid_max_date = delta_covid_max_date,
       pre_wave_infection_group = pre_delta_infection_group,
       pre_wave_infection_days = pre_delta_infection_days,
       n_doses_wave = n_doses_delta,
@@ -135,8 +132,6 @@ if (wave=="wave4") {
     mutate(
       wave_start_date = omicron_start_date,
       wave_end_date = omicron_end_date,
-      wave_covid_cat = as.numeric(!is.na(omicron_positive_test_date)),
-      wave_covid_max_date = omicron_positive_test_date,
       pre_wave_infection_group = pre_omicron_infection_group,
       pre_wave_infection_days = pre_omicron_infection_days,
       n_doses_wave = n_doses_omicron,
@@ -149,6 +144,27 @@ if (wave=="wave4") {
         pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group!="No prior infection" ~ "27+ weeks/unvax, infected",
         pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-26 weeks, uninfected",
         pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-26 weeks, infected",
+        TRUE ~ NA_character_
+      )
+    )
+}
+if (wave=="wavejn1") {
+  data_processed = data_processed %>%
+    mutate(
+      wave_start_date = jn1_start_date,
+      wave_end_date = jn1_end_date,
+      pre_wave_infection_group = pre_jn1_infection_group,
+      pre_wave_infection_days = pre_jn1_infection_days,
+      n_doses_wave = n_doses_jn1,
+      pre_wave_vaccine_group = pre_jn1_vaccine_group,
+      pre_wave_last_vax_date = pre_jn1_last_vax_date,
+      pre_wave_vax_diff = pre_jn1_vax_diff,
+      next_vax_date = post_jn1_first_vax_date,
+      pre_wave_vax_infection_comb = fct_case_when(
+        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group!="Infected (BA.5 or XBB)" ~ "27+ weeks/unvax, pre BA.5",
+        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group=="Infected (BA.5 or XBB)" ~ "27+ weeks/unvax, BA.5/XBB",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="Infected (BA.5 or XBB)" ~ "0-26 weeks, pre BA.5",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="Infected (BA.5 or XBB)" ~ "0-26 weeks, BA.5/XBB",
         TRUE ~ NA_character_
       )
     )

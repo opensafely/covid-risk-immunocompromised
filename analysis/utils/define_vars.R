@@ -31,14 +31,12 @@ process_data <- function(data_extracted) {
     data_extracted %>%
     mutate(
       agegroup = fct_case_when(
-        agegroup == "80plus" ~ "80plus", # = reference
-        agegroup == "70-79" ~ "70-79",
-        agegroup == "60-69" ~ "60-69",
-        agegroup == "50-59" ~ "50-59", 
-        agegroup == "40-49" ~ "40-49",
+        agegroup == "60-69" | agegroup == "70-79" ~ "60-79", # = reference
         agegroup == "18-39" ~ "18-39",
+        agegroup == "40-49" | agegroup == "50-59"~ "40-59", 
+        agegroup == "80plus" ~ "80plus",
         TRUE ~ NA_character_
-      ),
+        ),
       # no missings should occur as individuals with
       # missing age are not included in the study
       
@@ -226,8 +224,8 @@ process_data <- function(data_extracted) {
       ),
       radio_chemo_cat = fct_case_when(
         is.na(time_since_radio_chemo) ~ "Absent",
-        time_since_radio_chemo>182 ~ ">6 months",
-        time_since_radio_chemo>=0 & time_since_radio_chemo<=182 ~ "<=6 months",
+        time_since_radio_chemo>90 ~ ">3 months",
+        time_since_radio_chemo>=0 & time_since_radio_chemo<=90 ~ "<=3 months",
         TRUE ~ NA_character_
       ),
       
@@ -248,16 +246,18 @@ process_data <- function(data_extracted) {
       alpha_covid_cat = as.numeric(!is.na(alpha_covid_max_date)),
       delta_covid_max_date = pmax(delta_positive_test_date, delta_emergency_date, delta_hospitalisation_date, na.rm=TRUE),
       delta_covid_cat = as.numeric(!is.na(delta_covid_max_date)),
-      early_omicron_covid_max_date = pmax(early_omicron_positive_test_date, early_omicron_emergency_date, early_omicron_hospitalisation_date, na.rm=TRUE),
-      early_omicron_covid_cat = as.numeric(!is.na(early_omicron_covid_max_date)),
-      late_omicron_covid_max_date = pmax(late_omicron_positive_test_date, late_omicron_emergency_date, late_omicron_hospitalisation_date, na.rm=TRUE),
-      late_omicron_covid_cat = as.numeric(!is.na(late_omicron_covid_max_date)),
+      BA1_2_omicron_covid_max_date = pmax(BA1_2_omicron_positive_test_date, BA1_2_omicron_emergency_date, BA1_2_omicron_hospitalisation_date, na.rm=TRUE),
+      BA1_2_omicron_covid_cat = as.numeric(!is.na(BA1_2_omicron_covid_max_date)),
+      BA5_omicron_covid_max_date = pmax(BA5_omicron_positive_test_date, BA5_omicron_emergency_date, BA5_omicron_hospitalisation_date, na.rm=TRUE),
+      BA5_omicron_covid_cat = as.numeric(!is.na(BA5_omicron_covid_max_date)),
+      XBB_omicron_covid_max_date = pmax(XBB_omicron_positive_test_date, XBB_omicron_emergency_date, XBB_omicron_hospitalisation_date, na.rm=TRUE),
+      XBB_omicron_covid_cat = as.numeric(!is.na(XBB_omicron_covid_max_date)),
       
       # Calculate difference between latest infection and start of next era
       pre_alpha_infection_days = as.numeric(alpha_start_date - wt_covid_max_date),
       pre_delta_infection_days = as.numeric(delta_start_date - alpha_covid_max_date),
-      pre_early_omicron_infection_days = as.numeric(early_omicron_start_date - delta_covid_max_date),
-      pre_late_omicron_infection_days = as.numeric(late_omicron_start_date - early_omicron_covid_max_date),
+      pre_omicron_infection_days = as.numeric(omicron_start_date - delta_covid_max_date),
+      pre_jn1_infection_days = as.numeric(jn1_start_date - XBB_omicron_covid_max_date),
       
       # Prior infection groups (assign to most recent era)
       pre_alpha_infection_group = fct_case_when(
@@ -273,6 +273,13 @@ process_data <- function(data_extracted) {
         wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 ~ "No prior infection",
         (wt_covid_cat == 1 | alpha_covid_cat == 1) & delta_covid_cat == 0 ~ "Infected (Pre Delta)",
         delta_covid_cat == 1 ~ "Infected (Delta)"
+      ),
+      pre_jn1_infection_group = fct_case_when(
+        wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 & 
+          BA1_2_omicron_covid_cat == 0 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "No prior infection",
+        (wt_covid_cat == 1 | alpha_covid_cat == 1 | delta_covid_cat == 1 |  
+           BA1_2_omicron_covid_cat == 1) & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "Infected (Pre BA.5)",
+        (BA5_omicron_covid_cat == 1 | XBB_omicron_covid_cat == 1) ~ "Infected (BA.5 or XBB)"
       ),
       
       # Calculate earliest severe outcome

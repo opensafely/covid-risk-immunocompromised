@@ -165,7 +165,7 @@ era_exposure_variables = dict(
             },
     ),
    
-    # EARLY OMICRON (BA.1, BA.2)
+    # EARLY OMICRON (BA.1, BA.2) # BA.1 dominant from 15-Dec-2021, BA.5 dominant from 06-Jun-2022
     # Positive test
     BA1_2_omicron_positive_test_date = patients.with_test_result_in_sgss(
         pathogen = "SARS-CoV-2",
@@ -211,7 +211,7 @@ era_exposure_variables = dict(
             },
     ),
     
-    # MID OMICRON (BA.5)
+    # MID OMICRON (BA.5)  # BA.5 dominant from 06-Jun-2022, XBB dominant from 06-Feb-2023
     # Positive test
     BA5_omicron_positive_test_date = patients.with_test_result_in_sgss(
         pathogen = "SARS-CoV-2",
@@ -257,7 +257,7 @@ era_exposure_variables = dict(
             },
     ),
 
-    # LATE OMICRON (XBB)
+    # LATE OMICRON (XBB) # XBB dominant from 06-Feb-2023, JN.1 dominant from 04-Dec-2023
     # Positive test
     XBB_omicron_positive_test_date = patients.with_test_result_in_sgss(
         pathogen = "SARS-CoV-2",

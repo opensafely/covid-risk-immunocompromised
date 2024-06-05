@@ -143,7 +143,7 @@ study = StudyDefinition(
     immunosuppression_admin = patients.with_these_clinical_events(
         codelists.immunosuppression_admin_codes,
         returning="binary_flag",
-        between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: immunosuppression_admin_date
         date_format="YYYY-MM-DD",
@@ -153,7 +153,7 @@ study = StudyDefinition(
     radio_chemo = patients.with_these_clinical_events(
         codelists.radio_chemo_codes,
         returning="binary_flag",
-        between=["index_date - 182 days", "index_date"], # use for waves 1 and 2
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: radio_chemo_date
         date_format="YYYY-MM-DD",   

@@ -69,8 +69,6 @@
     "era_infection_vars" : [
         "wave_start_date",
         "wave_end_date",
-        "wave_covid_cat",
-        "wave_covid_max_date",
         "pre_wave_infection_group",
         "pre_wave_infection_days"
     ],
@@ -83,6 +81,8 @@
         "covid_vax_date_6",
         "covid_vax_date_7",
         "covid_vax_date_8",
+        "covid_vax_date_9",
+        "covid_vax_date_10",
         "n_doses_wave",
         "pre_wave_vaccine_group",
         "pre_wave_last_vax_date",
