@@ -61,7 +61,7 @@ add_n_doses <- function(data){
         n_doses_jn1 %in% c("0", "1", "2") ~ "0-2",
         n_doses_jn1 %in% c("3", "4") ~ "3-4",
         n_doses_jn1 %in% c("5", "6") ~ "5-6",
-        n_doses_jn1 == "7" ~ "7"
+        n_doses_jn1 == "7" ~ "7",
         n_doses_jn1 == "8+" ~ "8+"
       ),
     )

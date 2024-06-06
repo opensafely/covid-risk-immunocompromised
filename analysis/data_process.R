@@ -32,7 +32,7 @@ config <- fromJSON(here("analysis", "config.json"))
 args <- commandArgs(trailingOnly=TRUE)
 if(length(args)==0){
   # use for interactive testing
-  wave <- "wave4"
+  wave <- "wavejn1"
 } else {
   wave <- args[[1]]
 }
