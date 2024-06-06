@@ -21,7 +21,7 @@ source(paste0(utils_dir, "/calc_ir.R")) # functions to define vaccine groups
 # Select wave and subgroup based on input arguments
 args <- commandArgs(trailingOnly=TRUE)
 if(length(args)==0){
-  wave <- "wave4"
+  wave <- "wavejn1"
   subgroup <- "Tx"
 } else {
   wave <- args[[1]]
@@ -437,6 +437,13 @@ for (o in 1:length(outcomes)) {
 
 # Reorder columns
 ir_collated = ir_collated %>% relocate(variable,outcome)
+
+# Log summary
+print("model counts by outcome:")
+table(ir_collated$outcome)
+
+print("total events by outcome:")
+subset(ir_collated, variable=="N")[,1:5]
 
 # Remove analyses if <100 events total
 for (o in 1:length(outcomes)) {
