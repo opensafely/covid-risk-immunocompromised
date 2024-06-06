@@ -121,8 +121,8 @@ if (wave=="wave3") {
         pre_wave_vaccine_group=="Unvaccinated" & pre_wave_infection_group!="No prior infection" ~ "Unvaccinated, infected",
         pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group=="No prior infection" ~ "27+ weeks, uninfected",
         pre_wave_vaccine_group=="27+ weeks" & pre_wave_infection_group!="No prior infection" ~ "27+ weeks, infected",
-        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-27 weeks, uninfected",
-        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-27 weeks, infected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-26 weeks, uninfected",
+        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-26 weeks, infected",
         TRUE ~ NA_character_
       )
     )
@@ -140,8 +140,8 @@ if (wave=="wave4") {
       pre_wave_vax_diff = pre_omicron_vax_diff,
       next_vax_date = post_omicron_first_vax_date,
       pre_wave_vax_infection_comb = fct_case_when(
-        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group=="No prior infection" ~ "27+ weeks/unvax, uninfected",
-        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group!="No prior infection" ~ "27+ weeks/unvax, infected",
+        pre_wave_vaccine_group=="27+ weeks/unvax" & pre_wave_infection_group=="No prior infection" ~ "27+ weeks/unvax, uninfected",
+        pre_wave_vaccine_group=="27+ weeks/unvax" & pre_wave_infection_group!="No prior infection" ~ "27+ weeks/unvax, infected",
         pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="No prior infection" ~ "0-26 weeks, uninfected",
         pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="No prior infection" ~ "0-26 weeks, infected",
         TRUE ~ NA_character_
@@ -161,10 +161,10 @@ if (wave=="wavejn1") {
       pre_wave_vax_diff = pre_jn1_vax_diff,
       next_vax_date = post_jn1_first_vax_date,
       pre_wave_vax_infection_comb = fct_case_when(
-        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group!="Infected (BA.5 or XBB)" ~ "27+ weeks/unvax, pre BA.5",
-        pre_wave_vaccine_group %in% c("Unvaccinated","27+ weeks") & pre_wave_infection_group=="Infected (BA.5 or XBB)" ~ "27+ weeks/unvax, BA.5/XBB",
-        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group!="Infected (BA.5 or XBB)" ~ "0-26 weeks, pre BA.5",
-        pre_wave_vaccine_group %in% c("0-2 weeks","3-12 weeks", "13-26 weeks") & pre_wave_infection_group=="Infected (BA.5 or XBB)" ~ "0-26 weeks, BA.5/XBB",
+        pre_wave_vaccine_group=="27+ weeks/unvax" & pre_wave_infection_group!="Infected (BA.5/XBB)" ~ "27+ weeks/unvax, pre BA.5",
+        pre_wave_vaccine_group=="27+ weeks/unvax" & pre_wave_infection_group=="Infected (BA.5/XBB)" ~ "27+ weeks/unvax, BA.5/XBB",
+        pre_wave_vaccine_group=="0-26 weeks" & pre_wave_infection_group!="Infected (BA.5/XBB)" ~ "0-26 weeks, pre BA.5",
+        pre_wave_vaccine_group=="0-26 weeks" & pre_wave_infection_group=="Infected (BA.5/XBB)" ~ "0-26 weeks, BA.5/XBB",
         TRUE ~ NA_character_
       )
     )

@@ -46,8 +46,7 @@ add_n_doses <- function(data){
       ),
       # dose counts at start of omicron era
       n_doses_jn1 = fct_case_when(
-        covid_vax_date_8<=jn1_start_date ~ "8+",
-        covid_vax_date_7<=jn1_start_date ~ "7",
+        covid_vax_date_7<=jn1_start_date ~ "7+",
         covid_vax_date_6<=jn1_start_date ~ "6",
         covid_vax_date_5<=jn1_start_date ~ "5",
         covid_vax_date_4<=jn1_start_date ~ "4",
@@ -58,11 +57,9 @@ add_n_doses <- function(data){
       ),
       # reverse order
       n_doses_jn1 = fct_case_when(
-        n_doses_jn1 %in% c("0", "1", "2") ~ "0-2",
-        n_doses_jn1 %in% c("3", "4") ~ "3-4",
+        n_doses_jn1 %in% c("0", "1", "2", "3", "4") ~ "0-4",
         n_doses_jn1 %in% c("5", "6") ~ "5-6",
-        n_doses_jn1 == "7" ~ "7",
-        n_doses_jn1 == "8+" ~ "8+"
+        n_doses_jn1 == "7+" ~ "7+"
       ),
     )
 }
@@ -106,8 +103,12 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
                                 covid_vax_date_9_mod, covid_vax_date_10_mod, na.rm=TRUE),
       
       # Difference in days between last dose and start of era
-      pre_era_vax_diff = as.numeric(era_start_date - pre_era_last_vax_date),
+      pre_era_vax_diff = as.numeric(era_start_date - pre_era_last_vax_date)
       
+    ) 
+  
+  if (era=="delta") {
+    data <- data %>% mutate(
       # Pre-era windows
       pre_era_vaccine_group = fct_case_when(
         is.na(pre_era_last_vax_date) ~ "Unvaccinated",
@@ -116,23 +117,33 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
         pre_era_vax_diff>(2*7) & pre_era_vax_diff<=(12*7) ~ "3-12 weeks",
         pre_era_vax_diff>=0 & pre_era_vax_diff<=(2*7) ~ "0-2 weeks",
         TRUE ~ NA_character_
-      )
-    ) 
-  
-  if (era=="delta") {
-    data <- data %>% mutate(
+      ),
       pre_delta_last_vax_date = pre_era_last_vax_date,
       pre_delta_vax_diff = pre_era_vax_diff,
       pre_delta_vaccine_group = pre_era_vaccine_group,
     ) 
   } else if (era=="omicron")  {
     data <- data %>% mutate(
+      # Pre-era windows
+      pre_era_vaccine_group = fct_case_when(
+        is.na(pre_era_last_vax_date) | pre_era_vax_diff>(26*7) ~ "27+ weeks/unvax",
+        pre_era_vax_diff>(12*7) & pre_era_vax_diff<=(26*7) ~ "13-26 weeks",
+        pre_era_vax_diff>(2*7) & pre_era_vax_diff<=(12*7) ~ "3-12 weeks",
+        pre_era_vax_diff>=0 & pre_era_vax_diff<=(2*7) ~ "0-2 weeks",
+        TRUE ~ NA_character_
+      ),
       pre_omicron_last_vax_date = pre_era_last_vax_date,
       pre_omicron_vax_diff = pre_era_vax_diff,
       pre_omicron_vaccine_group = pre_era_vaccine_group,
     )
   } else {
     data <- data %>% mutate(
+      # Pre-era windows
+      pre_era_vaccine_group = fct_case_when(
+        is.na(pre_era_last_vax_date) | pre_era_vax_diff>(26*7) ~ "27+ weeks/unvax",
+        pre_era_vax_diff>=0 & pre_era_vax_diff<=(26*7) ~ "0-26 weeks",
+        TRUE ~ NA_character_
+      ),
       pre_jn1_last_vax_date = pre_era_last_vax_date,
       pre_jn1_vax_diff = pre_era_vax_diff,
       pre_jn1_vaccine_group = pre_era_vaccine_group,
