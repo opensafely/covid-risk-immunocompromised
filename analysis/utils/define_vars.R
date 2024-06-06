@@ -277,7 +277,7 @@ process_data <- function(data_extracted) {
       pre_jn1_infection_group = fct_case_when(
           BA1_2_omicron_covid_cat == 0 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "No infection since Omicron",
           BA1_2_omicron_covid_cat == 1 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "Infected (BA.1/BA.2)",
-          BA5_omicron_covid_cat == 1 | XBB_omicron_covid_cat == 1) ~ "Infected (BA.5/XBB)"
+          (BA5_omicron_covid_cat == 1 | XBB_omicron_covid_cat == 1) ~ "Infected (BA.5/XBB)"
       ),
       
       # Calculate earliest severe outcome
