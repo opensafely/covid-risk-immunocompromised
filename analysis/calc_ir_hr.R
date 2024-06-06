@@ -450,7 +450,8 @@ for (o in 1:length(outcomes)) {
   
   selected_outcome = outcomes[o]
   
-  if ( ir_collated$events[ir_collated$outcome==outcomes[o] & ir_collated$variable=="N"]<100 ) {
+  if ( ir_collated$events[ir_collated$outcome==outcomes[o] & ir_collated$variable=="N"]<100 |
+       is.na(ir_collated$events[ir_collated$outcome==outcomes[o] & ir_collated$variable=="N"]) ) {
     ir_collated = ir_collated %>% filter(outcome!= selected_outcome | variable=="N")
   }
 }
