@@ -100,12 +100,10 @@ if (subgroup=="IMD") {
                                                          "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")]
 }
 if (wave=="wave1") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_infection_group", "pre_wave_vax_infection_comb", 
-                                                         "radio_chemo_cat")] # remove radio_chemo_cat as all within 6m where observed
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_infection_group", "pre_wave_vax_infection_comb")] 
 }
 if (wave=="wave2") {
-  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_vax_infection_comb", 
-                                                         "radio_chemo_cat")] # remove radio_chemo_cat as all within 6m where observed
+  subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("n_doses_wave", "pre_wave_vaccine_group", "pre_wave_vax_infection_comb")] 
 }
 
 # Use loop to calculate incidence rates in each subgroup
@@ -201,7 +199,7 @@ for (o in 1:length(outcomes)) {
       ir_crude <- left_join(ir_crude, tidy, by = "group")
       
       # Fit modestly adjusted models (additionally include pre_wave_vaccine_group + pre_wave_infection_group)
-      if (wave=="wave3" | wave=="wave4") {
+      if (wave=="wave3" | wave=="wave4" | wave=="wavejn1") {
         if (group == "agegroup") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                           data = data_filtered)
@@ -267,7 +265,7 @@ for (o in 1:length(outcomes)) {
       }
       
       # Fit fully adjusted models (additionally include ethnicity + imd + multimorb_cat)
-      if (wave=="wave3" | wave=="wave4") {
+      if (wave=="wave3" | wave=="wave4" | wave=="wavejn1") {
         
         if (group == "agegroup") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group +
