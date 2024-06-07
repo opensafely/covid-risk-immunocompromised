@@ -75,6 +75,7 @@ counts <- data_filtered %>%
          agegroup_broad,
          sex,
          ethnicity,
+         ethnicity_broad,
          region,
          imd,
          care_home,

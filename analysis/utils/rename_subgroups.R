@@ -31,6 +31,7 @@ rename_subgroups <- function(table){
         subgroup == "agegroup_broad" ~ "Age group (broad)",
         subgroup == "sex" ~ "Sex",
         subgroup == "ethnicity" ~ "Ethnicity",
+        subgroup == "ethnicity_broad" ~ "Ethnicity (broad)",
         subgroup == "region" ~ "Region",
         subgroup == "imd" ~ "IMD quintile",
         subgroup == "care_home" ~ "Care home",

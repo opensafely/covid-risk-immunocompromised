@@ -95,10 +95,16 @@ process_data <- function(data_extracted) {
         ethnicity == "4" ~ "Black",
         #ethnicity == "5" ~ "Other",
         #ethnicity == "0" ~ "Unknown",
-        ethnicity %in% c("0","2","5") ~ "Unknown",
+        ethnicity %in% c("0","2","5") ~ "Other",
         TRUE ~ NA_character_ # no missings in real data expected 
         # (all mapped into 0) but dummy data will have missings (data is joined
         # and patient ids are not necessarily the same in both cohorts)
+      ),
+      
+      ethnicity_broad = fct_case_when(
+        ethnicity == "1" ~ "White",
+        ethnicity %in% c("0","2","3","4","5") ~ "Minority",
+        TRUE ~ NA_character_ # no missings in real data expected 
       ),
       
       care_home = ifelse(care_home_tpp==1 | care_home_code==1, 1, 0), 
