@@ -8,6 +8,7 @@
         "has_follow_up",
         "age",
         "agegroup",
+        "agegroup_broad",
         "agegroup_std",
         "sex",
         "ethnicity_primary",
@@ -87,7 +88,8 @@
         "pre_wave_vaccine_group",
         "pre_wave_last_vax_date",
         "pre_wave_vax_diff",
-        "pre_wave_vax_infection_comb"
+        "pre_wave_vax_infection_comb",
+        "pre_wave_vax_infection_comb_narrow"
     ],
     "outcome_vars" : [
         "next_vax_date",
