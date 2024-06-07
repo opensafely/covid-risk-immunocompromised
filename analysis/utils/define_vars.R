@@ -80,11 +80,12 @@ process_data <- function(data_extracted) {
       
       ethnicity = fct_case_when(
         ethnicity == "1" ~ "White",
-        ethnicity == "2" ~ "Mixed",
+        #ethnicity == "2" ~ "Mixed",
         ethnicity == "3" ~ "South Asian",
         ethnicity == "4" ~ "Black",
-        ethnicity == "5" ~ "Other",
-        ethnicity == "0" ~ "Unknown",
+        #ethnicity == "5" ~ "Other",
+        #ethnicity == "0" ~ "Unknown",
+        ethnicity %in% ("0","2","5") ~ "Unknown",
         TRUE ~ NA_character_ # no missings in real data expected 
         # (all mapped into 0) but dummy data will have missings (data is joined
         # and patient ids are not necessarily the same in both cohorts)
@@ -275,7 +276,10 @@ process_data <- function(data_extracted) {
         delta_covid_cat == 1 ~ "Infected (Delta)"
       ),
       pre_jn1_infection_group = fct_case_when(
-          BA1_2_omicron_covid_cat == 0 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "No infection since Omicron",
+        wt_covid_cat == 0 & alpha_covid_cat == 0 & delta_covid_cat == 0 & 
+        BA1_2_omicron_covid_cat == 0 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "No prior infection",          
+        (wt_covid_cat == 1 | alpha_covid_cat == 1 | delta_covid_cat == 1) & 
+        BA1_2_omicron_covid_cat == 0 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "Infected (Pre Omicron)", 
           BA1_2_omicron_covid_cat == 1 & BA5_omicron_covid_cat == 0 & XBB_omicron_covid_cat == 0 ~ "Infected (BA.1/BA.2)",
           (BA5_omicron_covid_cat == 1 | XBB_omicron_covid_cat == 1) ~ "Infected (BA.5/XBB)"
       ),

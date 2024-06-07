@@ -105,6 +105,7 @@ counts <- data_filtered %>%
          
          # Prior infection/vaccination
          pre_wave_vax_infection_comb,
+         pre_wave_vax_infection_comb_narrow,
          
          # At risk morbidity count
          multimorb_cat,

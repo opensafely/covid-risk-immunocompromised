@@ -40,6 +40,7 @@ rename_subgroups <- function(table){
         subgroup == "pre_wave_vaccine_group" ~ "Timing of last dose",
         subgroup == "pre_wave_infection_group" ~ "Prior infection status",
         subgroup == "pre_wave_vax_infection_comb" ~ "Vaccination/infection status",
+        subgroup == "pre_wave_vax_infection_comb_narrow" ~ "Vaccination/infection status (narrow)",
         
         # Immunosuppression
         subgroup == "imm_subgroup" ~ "Immunosuppression subgroup",
