@@ -72,6 +72,7 @@ counts <- data_filtered %>%
          
          # Demographics
          agegroup,
+         agegroup_broad,
          sex,
          ethnicity,
          region,

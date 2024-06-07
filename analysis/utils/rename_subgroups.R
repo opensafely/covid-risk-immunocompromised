@@ -27,7 +27,8 @@ rename_subgroups <- function(table){
         subgroup == "N" ~ "N",
         
         # Demography
-        subgroup == "agegroup" ~ "Age Group",
+        subgroup == "agegroup" ~ "Age group",
+        subgroup == "agegroup_broad" ~ "Age group (broad)",
         subgroup == "sex" ~ "Sex",
         subgroup == "ethnicity" ~ "Ethnicity",
         subgroup == "region" ~ "Region",
@@ -63,7 +64,7 @@ rename_subgroups <- function(table){
         subgroup == "multimorb_cat" ~ "Comorbidity count",
         
         # Comorbidities (multiple levels)
-        subgroup == "bmi" ~ "Body Mass Index",
+        subgroup == "bmi" ~ "Body mass index",
         subgroup == "asthma" ~ "Asthma",
         subgroup == "diabetes_controlled" ~ "Diabetes",
         subgroup == "ckd_rrt" ~ "Chronic kidney disease or renal replacement therapy",

@@ -31,6 +31,16 @@ process_data <- function(data_extracted) {
     data_extracted %>%
     mutate(
       agegroup = fct_case_when(
+        agegroup == "60-69" ~ "60-69", # = reference
+        agegroup == "18-39" ~ "18-39",
+        agegroup == "40-49" ~ "40-49", 
+        agegroup == "50-59" ~ "50-59",
+        agegroup == "70-79" ~ "70-79",
+        agegroup == "80plus" ~ "80plus",
+        TRUE ~ NA_character_
+      ),
+      
+      agegroup_broad = fct_case_when(
         agegroup == "60-69" | agegroup == "70-79" ~ "60-79", # = reference
         agegroup == "18-39" ~ "18-39",
         agegroup == "40-49" | agegroup == "50-59"~ "40-59", 
@@ -85,7 +95,7 @@ process_data <- function(data_extracted) {
         ethnicity == "4" ~ "Black",
         #ethnicity == "5" ~ "Other",
         #ethnicity == "0" ~ "Unknown",
-        ethnicity %in% ("0","2","5") ~ "Unknown",
+        ethnicity %in% c("0","2","5") ~ "Unknown",
         TRUE ~ NA_character_ # no missings in real data expected 
         # (all mapped into 0) but dummy data will have missings (data is joined
         # and patient ids are not necessarily the same in both cohorts)

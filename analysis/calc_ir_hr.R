@@ -59,7 +59,7 @@ if (subgroup=="Tx") {
 # create list of covariates
 subgroups_vctr <- c("N",
         # Demographics
-         "agegroup", "sex", "ethnicity", "region", "imd", "care_home","smoking_status_comb",
+         "agegroup", "agegroup_broad", "sex", "ethnicity", "region", "imd", "care_home","smoking_status_comb",
          # Immunosuppression (full)
          "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
          # Immunosuppression (binary)
@@ -181,6 +181,9 @@ for (o in 1:length(outcomes)) {
       if (group == "agegroup") {
         cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + strata(region)")), 
                             data = data_filtered)
+      } else if (group == "agegroup_broad") {
+        cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex + strata(region)")), 
+                            data = data_filtered)
       } else if (group == "sex") {
         cox_minimal = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + strata(region)")), 
                             data = data_filtered)
@@ -211,6 +214,10 @@ for (o in 1:length(outcomes)) {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                           data = data_filtered)
           
+        } else if (group == "agegroup_broad") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
         } else if (group == "sex") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_vaccine_group + pre_wave_infection_group + strata(region)")), 
                           data = data_filtered)
@@ -234,6 +241,10 @@ for (o in 1:length(outcomes)) {
       } else if (wave=="wave2") {
         if (group == "agegroup") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_infection_group + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "agegroup_broad") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex + pre_wave_infection_group + strata(region)")), 
                           data = data_filtered)
           
         } else if (group == "sex") {
@@ -276,6 +287,11 @@ for (o in 1:length(outcomes)) {
         
         if (group == "agegroup") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex + pre_wave_vaccine_group + pre_wave_infection_group +
+                                ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "agegroup_broad") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex + pre_wave_vaccine_group + pre_wave_infection_group +
                                 ethnicity + imd + multimorb_cat + strata(region)")), 
                           data = data_filtered)
           
@@ -329,6 +345,11 @@ for (o in 1:length(outcomes)) {
                                 ethnicity + imd + multimorb_cat + strata(region)")), 
                           data = data_filtered)
           
+        } else if (group == "agegroup_broad") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex + pre_wave_infection_group +
+                                ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
         } else if (group == "sex") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + factor(sex) + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
@@ -366,6 +387,11 @@ for (o in 1:length(outcomes)) {
         
         if (group == "agegroup") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup) + sex +
+                                ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+          
+        } else if (group == "agegroup_broad") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(agegroup_broad) + sex +
                                 ethnicity + imd + multimorb_cat + strata(region)")), 
                           data = data_filtered)
           
