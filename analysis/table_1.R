@@ -18,7 +18,7 @@ library(reshape2)
 # Select wave and subgroup based on input arguments
 args <- commandArgs(trailingOnly=TRUE)
 if(length(args)==0){
-  wave <- "wave4"
+  wave <- "wavejn1"
   subgroup <- "all"
 } else {
   wave <- args[[1]]
@@ -188,7 +188,7 @@ table1_redacted$summary = gsub(" ", "", table1_redacted$summary, fixed = TRUE) #
 table1_redacted$summary = gsub("(", " (", table1_redacted$summary, fixed = TRUE) # Add first space before (
 table1_redacted$summary[table1_redacted$count<=redaction_threshold | table1_redacted$non_count<=redaction_threshold] = "[Redacted]"
 table1_redacted$summary[table1_redacted$subgroup=="N"] = prettyNum(table1_redacted$count[table1_redacted$subgroup=="N"], big.mark=",")
-table1_redacted <- table1_redacted %>% select(-non_count, -count, -percent)
+table1_redacted <- table1_redacted %>% select(-non_count)
 
 ## Save as html/rds
 output_dir <- here("output", "table_1")
