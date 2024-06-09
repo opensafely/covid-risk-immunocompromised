@@ -24,7 +24,8 @@ collated = rbind(
   read_rds(here::here("output", "table_1", paste0("table_1_",wave,"_RC.rds"))) %>% mutate(subset = "RC"),
   read_rds(here::here("output", "table_1", paste0("table_1_",wave,"_IMM.rds"))) %>% mutate(subset = "IMM"),
   read_rds(here::here("output", "table_1", paste0("table_1_",wave,"_IMD.rds"))) %>% mutate(subset = "IMD")
-)
+) %>% 
+  relocate(subset)
 
 # Save as html/rds
 output_dir <- here("output", "table_1")

@@ -165,7 +165,12 @@ actions:
         csv1: output/table_ir_hr/table_ir_hr_wavejn1_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wavejn1_IMD_simple.csv
 
-
+  collate_ir_hr_wavejn1:
+    run: r:latest analysis/collate_ir_hr.R wavejn1
+    needs: [calc_ir_hr_wavejn1_Tx, calc_ir_hr_wavejn1_HC, calc_ir_hr_wavejn1_RC, calc_ir_hr_wavejn1_IMM, calc_ir_hr_wavejn1_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_wavejn1_collated.csv
 
   ## WAVE 4 ##
 
@@ -326,6 +331,12 @@ actions:
         csv1: output/table_ir_hr/table_ir_hr_wave4_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wave4_IMD_simple.csv
 
+  collate_ir_hr_wave4:
+    run: r:latest analysis/collate_ir_hr.R wave4
+    needs: [calc_ir_hr_wave4_Tx, calc_ir_hr_wave4_HC, calc_ir_hr_wave4_RC, calc_ir_hr_wave4_IMM, calc_ir_hr_wave4_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_wave4_collated.csv
 
 
   ## WAVE 3 ##
@@ -478,6 +489,12 @@ actions:
         csv1: output/table_ir_hr/table_ir_hr_wave3_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wave3_IMD_simple.csv
 
+  collate_ir_hr_wave3:
+    run: r:latest analysis/collate_ir_hr.R wave3
+    needs: [calc_ir_hr_wave3_Tx, calc_ir_hr_wave3_HC, calc_ir_hr_wave3_RC, calc_ir_hr_wave3_IMM, calc_ir_hr_wave3_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_wave3_collated.csv
 
 
   ## WAVE 2 ##
@@ -630,7 +647,12 @@ actions:
         csv1: output/table_ir_hr/table_ir_hr_wave2_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wave2_IMD_simple.csv
 
-
+  collate_ir_hr_wave2:
+    run: r:latest analysis/collate_ir_hr.R wave2
+    needs: [calc_ir_hr_wave2_Tx, calc_ir_hr_wave2_HC, calc_ir_hr_wave2_RC, calc_ir_hr_wave2_IMM, calc_ir_hr_wave2_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_wave2_collated.csv
 
   ## WAVE 1 ##
 
@@ -781,3 +803,25 @@ actions:
       moderately_sensitive:
         csv1: output/table_ir_hr/table_ir_hr_wave1_IMD.csv
         csv2: output/table_ir_hr/table_ir_hr_wave1_IMD_simple.csv
+
+  collate_ir_hr_wave1:
+    run: r:latest analysis/collate_ir_hr.R wave1
+    needs: [calc_ir_hr_wave1_Tx, calc_ir_hr_wave1_HC, calc_ir_hr_wave1_RC, calc_ir_hr_wave1_IMM, calc_ir_hr_wave1_IMD]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_wave1_collated.csv
+
+  # Collate tables all waves
+  collate_table_1_all_waves:
+    run: r:latest analysis/collate_table_1_all_waves.R
+    needs: [collate_table_1_wave1, collate_table_1_wave2, collate_table_1_wave3, collate_table_1_wave4, collate_table_1_wavejn1]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_1/table_1_collated_all_waves.csv
+        
+  collate_ir_hr_all_waves:
+    run: r:latest analysis/collate_ir_hr_all_waves.R
+    needs: [collate_ir_hr_wave1, collate_ir_hr_wave2, collate_ir_hr_wave3, collate_ir_hr_wave4, collate_ir_hr_wavejn1]
+    outputs:
+      moderately_sensitive:
+        csv: output/table_ir_hr/table_ir_hr_collated_all_waves.csv
