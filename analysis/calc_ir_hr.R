@@ -28,8 +28,7 @@ if(length(args)==0){
   subgroup <- args[[2]]
 }
 
-# Set rounding (TRUE/FALSE) and threshold
-round_logical = TRUE
+## Set rounding and redaction thresholds
 round_threshold = 5
 redaction_threshold = 10
 
@@ -81,11 +80,11 @@ subgroups_vctr <- c("N",
 # Retain detailed immunosuppression variable for all data or specific subset, otherwise retain binary variable
 if (subgroup=="Tx") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-                                                         "any_transplant", "ckd_rrt")]
+                                                         "any_transplant", "ckd_rrt")] #ckd_rrt removed due to colinearity with kidney transplant
 }
 if (subgroup=="HC") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-                                                         "any_transplant", "any_bone_marrow", "immunosuppression_diagnosis")]
+                                                         "any_transplant", "any_bone_marrow", "immunosuppression_diagnosis")] # immunosuppression diagnosis removed due to colinearity with haem cancer
 }
 if (subgroup=="RC") {
   subgroups_vctr = subgroups_vctr[!subgroups_vctr %in% c("any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat",  
@@ -163,7 +162,8 @@ for (o in 1:length(outcomes)) {
       }
     
     # Model output columns
-    model_cols = c("reference_row_min", "n_obs_min", "n_event_min", "exposure_min", "estimate_min", "std.error_min", "statistic_min", 
+    model_cols = c("reference_row_min", 
+                   "n_obs_min", "n_event_min", "exposure_min", "estimate_min", "std.error_min", "statistic_min", 
                    "p.value_min", "conf.low_min", "conf.high_min",
                    "n_obs_adj", "n_event_adj", "exposure_adj", "estimate_adj", "std.error_adj", "statistic_adj", 
                    "p.value_adj", "conf.low_adj", "conf.high_adj",
@@ -324,18 +324,24 @@ for (o in 1:length(outcomes)) {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                           data = data_filtered)
-          
+        
+        } else if (group == "pre_wave_infection_group") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + 
+                                           ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+            
         } else if (group == "pre_wave_vax_infection_comb" | group == "pre_wave_vax_infection_comb_narrow") {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
                           data = data_filtered)
-          
-        # } else if (group %in% c("care_home", "smoking_status_comb",
-        #                         "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-        #                         "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
-        #   cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
-        #                                   ethnicity + imd + strata(region)")), 
-        #                   data = data_filtered)
+        
+        # exclude multimorb from contributing morbidities due to colinearity
+        } else if (group %in% c("chronic_respiratory_disease", "asthma", "chronic_cardiac_disease", "bp_ht",
+                                "ckd_rrt", "chronic_liver_disease", "stroke", "dementia", "other_neuro", 
+                                "learning_disability", "diabetes_controlled", "asplenia", "bmi", "sev_mental_ill")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
+                                          ethnicity + imd + strata(region)")), 
+                          data = data_filtered)
           
         } else {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_vaccine_group + pre_wave_infection_group + 
@@ -380,12 +386,18 @@ for (o in 1:length(outcomes)) {
                                           ethnicity + imd + factor(multimorb_cat) + strata(region)")), 
                           data = data_filtered)
           
-        # } else if (group %in% c("care_home", "smoking_status_comb",
-        #                         "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-        #                         "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
-        #   cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group +
-        #                                   ethnicity + imd + strata(region)")), 
-        #                   data = data_filtered)
+        } else if (group == "pre_wave_infection_group") {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                                          ethnicity + imd + multimorb_cat + strata(region)")), 
+                          data = data_filtered)
+        
+        # exclude multimorb from contributing morbidities due to colinearity
+        } else if (group %in% c("chronic_respiratory_disease", "asthma", "chronic_cardiac_disease", "bp_ht",
+                                "ckd_rrt", "chronic_liver_disease", "stroke", "dementia", "other_neuro", 
+                                "learning_disability", "diabetes_controlled", "asplenia", "bmi", "sev_mental_ill")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
+                                          ethnicity + imd + strata(region)")), 
+                          data = data_filtered)
           
         } else {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + pre_wave_infection_group + 
@@ -429,14 +441,15 @@ for (o in 1:length(outcomes)) {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ rcs(age, 4) + sex + 
                                           ethnicity + imd + factor(multimorb_cat) + strata(region)")), 
                           data = data_filtered)
-          
-        # } else if (group %in% c("care_home", "smoking_status_comb",
-        #                         "any_transplant_type", "any_transplant_cat", "any_bone_marrow_type", "any_bone_marrow_cat", "radio_chemo_cat", "immunosuppression_medication_cat", "immunosuppression_diagnosis_cat", 
-        #                         "any_transplant", "any_bone_marrow", "radio_chemo", "immunosuppression_medication", "immunosuppression_diagnosis")) {
-        #   cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
-        #                                   ethnicity + imd + strata(region)")), 
-        #                   data = data_filtered)
-          
+        
+        # exclude multimorb from contributing morbidities due to colinearity
+        } else if (group %in% c("chronic_respiratory_disease", "asthma", "chronic_cardiac_disease", "bp_ht",
+                                "ckd_rrt", "chronic_liver_disease", "stroke", "dementia", "other_neuro", 
+                                "learning_disability", "diabetes_controlled", "asplenia", "bmi", "sev_mental_ill")) {
+          cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
+                                          ethnicity + imd + strata(region)")), 
+                          data = data_filtered)
+            
         } else {
           cox_adj = coxph(as.formula(paste0("Surv(follow_up, ind) ~ factor(",group,") + rcs(age, 4) + sex + 
                                           ethnicity + imd + multimorb_cat + strata(region)")), 
@@ -469,7 +482,7 @@ for (o in 1:length(outcomes)) {
       if (as.numeric(ir_crude$n[i])<=redaction_threshold) { ir_crude[i,c("n", redaction_columns)] = NA }
     }
     
-    # Secondary redactions
+    # Secondary redactions - retain outputs if at least 2 groups with sufficient event counts
     if( subgroups_vctr[s]!="N" & (sum(ir_crude$events>redaction_threshold, na.rm=T) < 2) ) { 
       ir_crude[,redaction_columns] = NA 
     }

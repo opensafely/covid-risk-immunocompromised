@@ -90,8 +90,8 @@ d = d %>%
       TRUE ~ "0"
     ),
     radio_chemo_alt = case_when(
-      radio_chemo_cat == ">6 months" ~ "RC (>6m)",
-      radio_chemo_cat == "<=6 months" ~ "RC (<=6m)",
+      radio_chemo_cat == ">3 months" ~ "RC (>3m)",
+      radio_chemo_cat == "<=3 months" ~ "RC (<=3m)",
       TRUE ~ "0"
     ),
     immunosuppression_medication_alt = case_when(
@@ -118,7 +118,7 @@ d$immuno_combined = paste0(
 # Summarise set sizes
 sets = data.frame("Group" = c("Tx (KT)", "Tx (OT)", 
                               "Tx (BM)", "HC (Tx-)",
-                              "RC (>6m)", "RC (<=6m)",
+                              "RC (>3m)", "RC (<=3m)",
                               "IMM (>3m)", "IMM (<=3m)",
                               "IMD (>1y)", "IMD (<=1y)"),
                   "Count" = c(
@@ -126,8 +126,8 @@ sets = data.frame("Group" = c("Tx (KT)", "Tx (OT)",
                     plyr::round_any(sum(d$any_transplant_type=="Other transplant", na.rm=T), 5),
                     plyr::round_any(sum(d$any_bone_marrow_type=="Tx (BM)", na.rm=T), 5),
                     plyr::round_any(sum(d$any_bone_marrow_type=="HC no Tx (BM)", na.rm=T), 5),
-                    plyr::round_any(sum(d$radio_chemo_cat==">6 months", na.rm=T), 5),
-                    plyr::round_any(sum(d$radio_chemo_cat=="<=6 months", na.rm=T), 5),
+                    plyr::round_any(sum(d$radio_chemo_cat==">3 months", na.rm=T), 5),
+                    plyr::round_any(sum(d$radio_chemo_cat=="<=3 months", na.rm=T), 5),
                     plyr::round_any(sum(d$immunosuppression_medication_cat==">3 months", na.rm=T), 5),
                     plyr::round_any(sum(d$immunosuppression_medication_cat=="<=3 months", na.rm=T), 5),
                     plyr::round_any(sum(d$immunosuppression_diagnosis_cat==">1 year", na.rm=T), 5),
@@ -140,7 +140,7 @@ sets = data.frame("Group" = c("Tx (KT)", "Tx (OT)",
 collated = data.frame(table(d$immuno_combined)) %>% arrange(-Freq)
 names(collated) = c("Group", "Count")
 
-# Group counts of <100 as 'Other'
+# Group counts of <500 as 'Other'
 collated_other = data.frame("Group" = "Other",
                             "Count" = sum(collated$Count[collated$Count<500])) 
 collated_final = rbind(collated[collated$Count>=500,], collated_other)  %>%
