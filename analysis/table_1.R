@@ -188,6 +188,8 @@ table1_redacted$summary = gsub(" ", "", table1_redacted$summary, fixed = TRUE) #
 table1_redacted$summary = gsub("(", " (", table1_redacted$summary, fixed = TRUE) # Add first space before (
 table1_redacted$summary[table1_redacted$count<=redaction_threshold | table1_redacted$non_count<=redaction_threshold] = "[Redacted]"
 table1_redacted$summary[table1_redacted$subgroup=="N"] = prettyNum(table1_redacted$count[table1_redacted$subgroup=="N"], big.mark=",")
+table1_redacted$count[table1_redacted$summary=="[Redacted]"] = "[Redacted]"
+table1_redacted$percent[table1_redacted$summary=="[Redacted]"] = "[Redacted]"
 table1_redacted <- table1_redacted %>% select(-non_count)
 
 ## Save as html/rds

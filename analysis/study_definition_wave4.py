@@ -133,7 +133,7 @@ study = StudyDefinition(
     immunosuppression_medication = patients.with_these_medications(
         codelists.immunosuppression_medication_codes,
         returning="binary_flag",
-        between=["index_date - 182 days", "index_date"], 
+        between=["index_date - 182 days", "index_date"],
         find_last_match_in_period=True,
         include_date_of_match=True, # variable: immunosuppression_medication_date
         date_format="YYYY-MM-DD",

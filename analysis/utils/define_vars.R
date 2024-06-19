@@ -102,8 +102,8 @@ process_data <- function(data_extracted) {
       ),
       
       ethnicity_broad = fct_case_when(
-        ethnicity == "1" ~ "White",
-        ethnicity %in% c("0","2","3","4","5") ~ "Minority",
+        ethnicity == "White" ~ "White",
+        ethnicity != "White" ~ "Minority",
         TRUE ~ NA_character_ # no missings in real data expected 
       ),
       

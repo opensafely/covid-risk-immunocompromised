@@ -76,7 +76,7 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
   
   if (era=="delta") {
     data <- data %>% mutate(era_start_date = delta_start_date)
-  } else  if (era=="omicron") {
+  } else if (era=="omicron") {
     data <- data %>% mutate(era_start_date = omicron_start_date)
   } else {
     data <- data %>% mutate(era_start_date = jn1_start_date)
