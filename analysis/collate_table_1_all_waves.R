@@ -20,6 +20,6 @@ collated = rbind(
   relocate(wave)
 
 # Save as html/rds
-output_dir <- here("output", "table_1")
+output_dir <- here("output", "collated")
 fs::dir_create(output_dir)
-write_csv(collated, here::here("output", "table_1",  paste0("table_1_collated_all_waves.csv")))
+write_csv(collated, here::here("output", "collated",  paste0("table_1_collated_all_waves.csv")))
