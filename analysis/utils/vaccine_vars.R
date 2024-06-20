@@ -114,8 +114,7 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
         is.na(pre_era_last_vax_date) ~ "Unvaccinated",
         pre_era_vax_diff>(26*7) ~ "27+ weeks",
         pre_era_vax_diff>(12*7) & pre_era_vax_diff<=(26*7) ~ "13-26 weeks",
-        pre_era_vax_diff>(2*7) & pre_era_vax_diff<=(12*7) ~ "3-12 weeks",
-        pre_era_vax_diff>=0 & pre_era_vax_diff<=(2*7) ~ "0-2 weeks",
+        pre_era_vax_diff>=0 & pre_era_vax_diff<=(12*7) ~ "0-12 weeks",
         TRUE ~ NA_character_
       ),
       pre_delta_last_vax_date = pre_era_last_vax_date,
@@ -128,8 +127,7 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
       pre_era_vaccine_group = fct_case_when(
         is.na(pre_era_last_vax_date) | pre_era_vax_diff>(26*7) ~ "27+ weeks/unvax",
         pre_era_vax_diff>(12*7) & pre_era_vax_diff<=(26*7) ~ "13-26 weeks",
-        pre_era_vax_diff>(2*7) & pre_era_vax_diff<=(12*7) ~ "3-12 weeks",
-        pre_era_vax_diff>=0 & pre_era_vax_diff<=(2*7) ~ "0-2 weeks",
+        pre_era_vax_diff>=0 & pre_era_vax_diff<=(12*7) ~ "0-12 weeks",
         TRUE ~ NA_character_
       ),
       pre_omicron_last_vax_date = pre_era_last_vax_date,
@@ -141,7 +139,8 @@ last_dose_pre_era <- function(data, era=c("delta", "omicron", "jn1")){
       # Pre-era windows
       pre_era_vaccine_group = fct_case_when(
         is.na(pre_era_last_vax_date) | pre_era_vax_diff>(26*7) ~ "27+ weeks/unvax",
-        pre_era_vax_diff>=0 & pre_era_vax_diff<=(26*7) ~ "0-26 weeks",
+        pre_era_vax_diff>(12*7) & pre_era_vax_diff<=(26*7) ~ "13-26 weeks",
+        pre_era_vax_diff>=0 & pre_era_vax_diff<=(12*7) ~ "0-12 weeks",
         TRUE ~ NA_character_
       ),
       pre_jn1_last_vax_date = pre_era_last_vax_date,
